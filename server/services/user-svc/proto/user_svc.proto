@@ -1,0 +1,96 @@
+syntax="proto3";
+package user_svc;
+
+// -------------------- General -------------------- //
+
+enum Role {
+    USER = 0;
+    ADMIN = 1;
+} 
+
+
+// -------------------- User -------------------- //
+
+message CreateUserReq {
+    string email = 1;
+    string password = 2;
+}
+
+message FindUSerReq {
+    string idOrEmail = 1;
+}
+
+message UserRes {
+    int32 id = 1;
+    string email = 2;
+    string password = 3;
+    string role = 4;
+}
+
+// -------------------- Auth -------------------- //
+
+message AccessToken {
+    string token = 1;
+    int32 exp = 2;
+}
+
+message AccessTokenRes {
+    AccessToken accessToken = 1;
+}
+
+// ----- Register ----- //
+message RegisterReq {
+    string email = 1;
+    string password = 2;
+    string passwordRepeat = 3;
+    reserved 4 to 6;
+}
+
+message StatusRes {
+    bool status = 1;
+}
+
+message VerifyCodeBody {
+    string email = 1;
+    string password = 2;
+    int32 code = 3;
+}
+
+message VerifyCodeReq {
+    VerifyCodeBody body = 1;
+    string agent = 2;
+}
+
+
+// ----- Login ----- //
+message LoginReq {
+    string email = 1;
+    string password = 2;
+}
+
+// ----- Logout ----- //
+message LogoutReq {
+    int32 id = 1;
+    string agent = 2;
+    reserved 3 to 5;
+}
+
+// ----- Refresh ----- //
+message RefreshingReq { 
+    AccessToken accessToken = 1;
+    string agent = 2;
+}
+
+service UserService {
+    rpc CreateUser(CreateUserReq) returns (UserRes) {}
+    rpc FindUser(FindUSerReq) returns (UserRes) {}
+
+    rpc Register(RegisterReq) returns (StatusRes) {}
+    rpc VerifyCode(VerifyCodeReq) returns (AccessTokenRes) {}
+
+    rpc Login (LoginReq) returns (StatusRes) {}
+
+    rpc Logout (LogoutReq) returns (StatusRes) {}
+
+    rpc refreshingToken (RefreshingReq) returns (AccessTokenRes) {}
+}
