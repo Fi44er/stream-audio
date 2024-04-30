@@ -47,14 +47,16 @@ export class UserSvcController implements OnModuleInit {
   //---------- User ---------- //
 
   @Post('create-user')
-  async createUser(@Body() dto: CreateUserReq): Promise<UserRes> {
-    const user = await this.userClient.createUser(dto).toPromise();
+  async createUser(@Body() dto: CreateUserReq): Promise<Observable<UserRes>> {
+    const user = this.userClient.createUser(dto);
     return user;
   }
 
   @Get('get-user/:idOrEmail')
-  async getUser(@Param('idOrEmail') idOrEmail: string): Promise<UserRes> {
-    const user = await this.userClient.findUser({ idOrEmail }).toPromise();
+  async getUser(
+    @Param('idOrEmail') idOrEmail: string,
+  ): Promise<Observable<UserRes>> {
+    const user = this.userClient.findUser({ idOrEmail });
     return user;
   }
 
@@ -121,7 +123,9 @@ export class UserSvcController implements OnModuleInit {
   }
 
   @Get('verify-access-token')
-  async verifyAccessToken(token: VerifyTokenReq): Promise<JwtPayload> {
-    return await this.userClient.verifyAccessToken(token).toPromise();
+  async verifyAccessToken(
+    token: VerifyTokenReq,
+  ): Promise<Observable<JwtPayload>> {
+    return this.userClient.verifyAccessToken(token);
   }
 }

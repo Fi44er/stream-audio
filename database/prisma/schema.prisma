@@ -19,6 +19,7 @@ model User {
     password String
     role     Roles   @default(USER)
     token    Token[]
+    room     Room[]
 
     @@map("users")
 }
@@ -46,4 +47,12 @@ model VerificationCode {
     createdAt DateTime @map("created-at")
 
     @@map("verification-code")
+}
+
+model Room {
+    id     String @id @default(uuid())
+    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId Int
+
+    @@map("rooms")
 }

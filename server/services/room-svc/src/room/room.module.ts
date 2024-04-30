@@ -1,24 +1,10 @@
 import { Module } from '@nestjs/common';
 import { RoomService } from './room.service';
 import { RoomGateway } from './room.gateway';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { USER_SERVICE_NAME } from 'proto/user_svc';
-import { resolve } from 'path';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
-  imports: [
-    ClientsModule.register([
-      {
-        name: USER_SERVICE_NAME,
-        transport: Transport.GRPC,
-        options: {
-          url: '0.0.0.0:3001',
-          package: 'user_svc',
-          protoPath: resolve(__dirname, '../../proto/user_svc.proto'),
-        },
-      },
-    ]),
-  ],
+  imports: [UserModule],
   providers: [RoomGateway, RoomService],
 })
 export class RoomModule {}
