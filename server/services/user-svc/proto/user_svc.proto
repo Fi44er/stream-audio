@@ -81,6 +81,16 @@ message RefreshingReq {
     string agent = 2;
 }
 
+// ----- VerifyToken ----- //
+message VerifyTokenReq {
+    string token = 1;
+}
+
+message JwtPayload {
+    int32 id = 1;
+    string login = 2;
+    string role = 3;
+}
 service UserService {
     rpc CreateUser(CreateUserReq) returns (UserRes) {}
     rpc FindUser(FindUSerReq) returns (UserRes) {}
@@ -92,5 +102,7 @@ service UserService {
 
     rpc Logout (LogoutReq) returns (StatusRes) {}
 
-    rpc refreshingToken (RefreshingReq) returns (AccessTokenRes) {}
+    rpc RefreshingToken (RefreshingReq) returns (AccessTokenRes) {}
+
+    rpc VerifyAccessToken (VerifyTokenReq) returns (JwtPayload) {}
 }

@@ -16,5 +16,6 @@ async function bootstrap() {
     },
   );
   app.listen();
+  console.log('Gateway is running on port 3001');
 }
 bootstrap();

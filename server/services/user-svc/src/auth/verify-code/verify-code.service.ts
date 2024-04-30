@@ -2,7 +2,7 @@ import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
-import { TokensService } from 'lib/utils/tokens/tokens.service';
+import { GenerateTokensService } from 'lib/utils/generate-tokens/generate-tokens.service';
 import { AccessTokenRes, VerifyCodeReq } from 'proto/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
@@ -12,7 +12,7 @@ export class VerifyCodeService {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly configService: ConfigService,
-    private readonly tokensService: TokensService,
+    private readonly generateTokensService: GenerateTokensService,
     private readonly userService: UserService,
   ) {}
 
@@ -54,11 +54,17 @@ export class VerifyCodeService {
         email: dto.body.email,
         password: dto.body.password,
       });
-      const token = await this.tokensService.generateTokens(user, dto.agent);
+      const token = await this.generateTokensService.generateTokens(
+        user,
+        dto.agent,
+      );
       return token;
     }
 
-    const token = await this.tokensService.generateTokens(existUser, dto.agent);
+    const token = await this.generateTokensService.generateTokens(
+      existUser,
+      dto.agent,
+    );
     return token;
   }
 }

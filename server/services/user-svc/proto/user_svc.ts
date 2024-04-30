@@ -75,6 +75,17 @@ export interface RefreshingReq {
   agent: string;
 }
 
+/** ----- VerifyToken ----- // */
+export interface VerifyTokenReq {
+  token: string;
+}
+
+export interface JwtPayload {
+  id: number;
+  login: string;
+  role: string;
+}
+
 export const USER_SVC_PACKAGE_NAME = "user_svc";
 
 export interface UserServiceClient {
@@ -91,6 +102,8 @@ export interface UserServiceClient {
   logout(request: LogoutReq): Observable<StatusRes>;
 
   refreshingToken(request: RefreshingReq): Observable<AccessTokenRes>;
+
+  verifyAccessToken(request: VerifyTokenReq): Observable<JwtPayload>;
 }
 
 export interface UserServiceController {
@@ -107,6 +120,8 @@ export interface UserServiceController {
   logout(request: LogoutReq): Promise<StatusRes> | Observable<StatusRes> | StatusRes;
 
   refreshingToken(request: RefreshingReq): Promise<AccessTokenRes> | Observable<AccessTokenRes> | AccessTokenRes;
+
+  verifyAccessToken(request: VerifyTokenReq): Promise<JwtPayload> | Observable<JwtPayload> | JwtPayload;
 }
 
 export function UserServiceControllerMethods() {
@@ -119,6 +134,7 @@ export function UserServiceControllerMethods() {
       "login",
       "logout",
       "refreshingToken",
+      "verifyAccessToken",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);

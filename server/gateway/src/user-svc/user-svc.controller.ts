@@ -12,18 +12,19 @@ import {
 } from '@nestjs/common';
 import {
   AccessToken,
+  AccessTokenRes,
   CreateUserReq,
+  JwtPayload,
   LoginReq,
   LogoutReq,
-  LogoutRes,
   RegisterReq,
-  RegisterRes,
+  StatusRes,
   USER_SERVICE_NAME,
   UserRes,
   UserServiceClient,
   VerifyCodeBody,
   VerifyCodeReq,
-  VerifyCodeRes,
+  VerifyTokenReq,
 } from '../../proto/user_svc';
 import { ClientGrpc } from '@nestjs/microservices';
 import { UserAgent } from 'lib/decorators/userAgent.decorator';
@@ -61,13 +62,14 @@ export class UserSvcController implements OnModuleInit {
 
   // ------ Register ----- //
   @Post('register')
-  async register(@Body() dto: RegisterReq): Promise<Observable<RegisterRes>> {
+  async register(@Body() dto: RegisterReq): Promise<Observable<StatusRes>> {
     const status = this.userClient.register(dto);
     return status;
   }
 
+  // ------ Login ----- //
   @Post('login')
-  async login(@Body() dto: LoginReq): Promise<Observable<RegisterRes>> {
+  async login(@Body() dto: LoginReq): Promise<Observable<StatusRes>> {
     const status = this.userClient.login(dto);
     return status;
   }
@@ -77,7 +79,7 @@ export class UserSvcController implements OnModuleInit {
     @Body() body: VerifyCodeBody,
     @UserAgent() agent: string,
     @Res() res: Response,
-  ): Promise<VerifyCodeRes> {
+  ): Promise<AccessTokenRes> {
     const verifyCodeReq: VerifyCodeReq = { body: { ...body }, agent };
     const token = await this.userClient.verifyCode(verifyCodeReq).toPromise();
     this.setRefreshTokenToCookie(token.accessToken, res);
@@ -103,11 +105,10 @@ export class UserSvcController implements OnModuleInit {
     @Cookie(ACCESS_TOKEN) token: string,
     @Res() res: Response,
     @UserAgent() agent: string,
-  ): Promise<Observable<LogoutRes>> {
+  ): Promise<Observable<StatusRes>> {
     const logoutReq: LogoutReq = {
       id: id,
       agent,
-      token: token,
     };
 
     res.cookie(ACCESS_TOKEN, '', {
@@ -117,5 +118,10 @@ export class UserSvcController implements OnModuleInit {
     });
     res.sendStatus(HttpStatus.OK);
     return this.userClient.logout(logoutReq);
+  }
+
+  @Get('verify-access-token')
+  async verifyAccessToken(token: VerifyTokenReq): Promise<JwtPayload> {
+    return await this.userClient.verifyAccessToken(token).toPromise();
   }
 }

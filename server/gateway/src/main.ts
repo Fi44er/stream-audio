@@ -9,5 +9,6 @@ async function bootstrap() {
     origin: '*',
   });
   await app.listen(6069);
+  console.log('Gateway is running on port 6069');
 }
 bootstrap();

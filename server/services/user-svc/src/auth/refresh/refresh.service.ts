@@ -2,7 +2,7 @@ import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import * as jwt from 'jsonwebtoken';
-import { TokensService } from 'lib/utils/tokens/tokens.service';
+import { GenerateTokensService } from 'lib/utils/generate-tokens/generate-tokens.service';
 import { RefreshingReq } from 'proto/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -10,7 +10,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class RefreshService {
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly tokensService: TokensService,
+    private readonly generateTokensService: GenerateTokensService,
   ) {}
 
   async refreshToken(dto: RefreshingReq) {
@@ -42,7 +42,7 @@ export class RefreshService {
     const user = await this.prismaService.user.findFirst({
       where: { id: userId },
     });
-    return await this.tokensService.generateTokens(user, dto.agent);
+    return await this.generateTokensService.generateTokens(user, dto.agent);
 
     // const token = await this.prismaService.token.findFirst({ where: { token: refreshToken } });
   }

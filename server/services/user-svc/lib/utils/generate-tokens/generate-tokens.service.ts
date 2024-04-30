@@ -9,7 +9,7 @@ import { v4 } from 'uuid';
 import { convertToSecondsUtil } from '../convert-to-seconds';
 
 @Injectable()
-export class TokensService {
+export class GenerateTokensService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly prismaService: PrismaService,

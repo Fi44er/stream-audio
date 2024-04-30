@@ -7,7 +7,7 @@ import { RefreshService } from './refresh.service';
 export class RefreshController {
   constructor(private readonly refreshService: RefreshService) {}
 
-  @GrpcMethod('UserService', 'refreshingToken')
+  @GrpcMethod('UserService', 'RefreshingToken')
   async refreshingToken(dto: RefreshingReq): Promise<any> {
     return await this.refreshService.refreshToken(dto);
   }
