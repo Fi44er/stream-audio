@@ -8,7 +8,7 @@ import {
   UserServiceClient,
   VerifyTokenReq,
 } from 'proto/user_svc';
-import { Observable } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
@@ -21,13 +21,20 @@ export class UserService {
       this.client.getService<UserServiceClient>(USER_SERVICE_NAME);
   }
 
-  async verifyAccessToken(
-    token: VerifyTokenReq,
-  ): Promise<Observable<JwtPayload>> {
-    return this.userClient.verifyAccessToken(token);
+  async verifyAccessToken(token: VerifyTokenReq): Promise<JwtPayload> {
+    const observablePayload = this.userClient.verifyAccessToken(token);
+    const payload = firstValueFrom(observablePayload).then((jwtPayload) => {
+      return jwtPayload;
+    });
+
+    return payload;
   }
 
-  async findOne(idOrEmail: FindUSerReq): Promise<Observable<UserRes>> {
-    return this.userClient.findUser(idOrEmail);
+  async findOne(idOrEmail: FindUSerReq): Promise<UserRes> {
+    const observableUser = this.userClient.findUser(idOrEmail);
+    const user = firstValueFrom(observableUser).then((user) => {
+      return user;
+    });
+    return user;
   }
 }

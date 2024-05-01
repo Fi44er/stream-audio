@@ -2,12 +2,11 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
   OnGatewayInit,
+  SubscribeMessage,
   WebSocketGateway,
 } from '@nestjs/websockets';
 import { RoomService } from './room.service';
 import { UserService } from 'src/user/user.service';
-import { Observable } from 'rxjs';
-import { JwtPayload } from 'proto/user_svc';
 import { Socket } from 'socket.io';
 
 @WebSocketGateway({
@@ -18,7 +17,7 @@ import { Socket } from 'socket.io';
 export class RoomGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  connectedUsers: Map<string, string> = new Map();
+  connectedUsers: Map<string, number> = new Map();
 
   constructor(
     private readonly roomService: RoomService,
@@ -29,27 +28,50 @@ export class RoomGateway
     console.log('Init');
   }
 
-  handleConnection(client: Socket) {
+  async handleConnection(client: Socket) {
     const token = client.handshake.query.token.toString();
-    const payload = this.userService.verifyAccessToken({ token });
-
-    payload.then((res: Observable<JwtPayload>) => {
-      res.subscribe((jwtPayload: JwtPayload) => {
-        const id = jwtPayload.id;
-        const user =
-          payload && this.userService.findOne({ idOrEmail: String(id) });
-        if (!user) {
-          client.disconnect(true);
-          return;
-        }
-      });
+    const payload = await this.userService.verifyAccessToken({ token });
+    const user = await this.userService.findOne({
+      idOrEmail: String(payload.id),
     });
 
+    if (!user) {
+      client.disconnect(true);
+      return;
+    }
+
+    const room = await this.roomService.getRoomUser(user.id);
+    if (room) {
+      return this.onRoomJoin(client, room.roomId);
+    }
+
+    this.connectedUsers.set(client.id, user.id);
     console.log(`Client ID: ${client.id} conection!`);
-    this.connectedUsers.set(client.id, client.id);
   }
 
-  handleDisconnect(client: any) {
+  @SubscribeMessage('join')
+  async onRoomJoin(client: Socket, roomId: string) {
+    const limit = 10;
+
+    const room = await this.roomService.findOneWithRelations(roomId);
+    if (!room) return;
+
+    const userId = this.connectedUsers.get(client.id);
+
+    const messages = room.chat.slice(
+      room.chat.length < limit ? 0 : -limit,
+      room.chat.length,
+    );
+
+    await this.roomService.updateUserRoom(userId, room.id);
+
+    client.join(roomId);
+
+    client.emit('message', messages);
+  }
+
+  handleDisconnect(client: Socket) {
+    this.connectedUsers.delete(client.id);
     console.log(`Client ID: ${client.id} disconection!`);
   }
 }

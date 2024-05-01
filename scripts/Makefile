@@ -11,3 +11,11 @@ start-all-services:
 	gnome-terminal -- bash -c "cd $${dir} && yarn start:dev"; \
 	done; \
 	gnome-terminal -- bash -c "cd ../server/gateway && yarn start:dev"
+
+change-all-prisma:
+	@for dir in ../server/services/*/; do \
+    	if [ -d "$${dir%/}" ]; then \
+        	cp ../database/prisma/schema.prisma "$${dir%/}/prisma" && \
+            (cd "$${dir%/}/prisma" && npx prisma generate); \
+        fi; \
+    done
