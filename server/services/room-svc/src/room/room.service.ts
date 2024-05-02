@@ -16,7 +16,6 @@ export class RoomService {
         name: dto.name,
       },
     });
-
     return room;
   }
 
@@ -40,13 +39,9 @@ export class RoomService {
         chat: true,
       },
     });
-
-    console.log(room, roomId);
-
     if (!room) {
       throw new BadRequestException('Комната не найдена');
     }
-
     return room;
   }
 
@@ -56,7 +51,6 @@ export class RoomService {
       update: { roomId },
       create: { userId, roomId },
     });
-
     return room;
   }
 
@@ -82,7 +76,6 @@ export class RoomService {
         message,
       },
     });
-
     return roomMessage;
   }
 }

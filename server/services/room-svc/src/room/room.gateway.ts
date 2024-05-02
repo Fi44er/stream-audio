@@ -12,11 +12,7 @@ import { Socket, Server } from 'socket.io';
 import { AddMessageDto } from './dto/addMessage.dto';
 import { FindOneWithRelationsDto } from './dto/findOneWithRelations.dto';
 
-@WebSocketGateway({
-  cors: {
-    origin: '*',
-  },
-})
+@WebSocketGateway({ cors: { origin: '*' } })
 export class RoomGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
@@ -72,8 +68,6 @@ export class RoomGateway
     if (!room) return;
 
     const userId = this.connectedUsers.get(client.id);
-    console.log('!!!!!!!!!!!!!!!!' + userId);
-    console.log(this.connectedUsers);
 
     const messages = room.chat.slice(
       room.chat.length < limit ? 0 : -limit,
@@ -103,7 +97,6 @@ export class RoomGateway
     await this.roomService.addMessage(addMessageDto);
 
     client.to(room.roomId).emit('message', addMessageDto.message);
-    this.server.emit('message', addMessageDto.message);
   }
 
   // --- disconnecting the user from the room --- //
