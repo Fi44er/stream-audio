@@ -4,11 +4,13 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { RoomService } from './room.service';
 import { UserService } from 'src/user/user.service';
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { AddMessageDto } from './dto/addMessage.dto';
+import { FindOneWithRelationsDto } from './dto/findOneWithRelations.dto';
 
 @WebSocketGateway({
   cors: {
@@ -18,6 +20,7 @@ import { AddMessageDto } from './dto/addMessage.dto';
 export class RoomGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
+  @WebSocketServer() server: Server;
   connectedUsers: Map<string, number> = new Map();
 
   constructor(
@@ -29,6 +32,7 @@ export class RoomGateway
     console.log('Init');
   }
 
+  // --- connecting a user to a socket --- //
   async handleConnection(client: Socket) {
     const token = client.handshake.query.token.toString();
     const payload = await this.userService.verifyAccessToken({ token });
@@ -47,23 +51,29 @@ export class RoomGateway
       return;
     }
 
-    const room = await this.roomService.getRoomUser(user.id);
-    if (room) {
-      return this.onRoomJoin(client, room.roomId);
-    }
-
     this.connectedUsers.set(client.id, user.id);
     console.log(`Client ID: ${client.id} conection!`);
+
+    const room = await this.roomService.getRoomUser(user.id);
+    if (room) {
+      return this.onRoomJoin(client, { roomId: room.roomId });
+    }
   }
 
+  // --- connecting a user to a room --- //
   @SubscribeMessage('join')
-  async onRoomJoin(client: Socket, roomId: string) {
+  async onRoomJoin(client: Socket, dto: FindOneWithRelationsDto) {
+    const { roomId } = dto;
     const limit = 10;
+    client.join('qwertyukm');
+    // console.log(this.server.of('/').adapter.rooms);
 
-    const room = await this.roomService.findOneWithRelations(roomId);
+    const room = await this.roomService.findOneWithRelations(dto);
     if (!room) return;
 
     const userId = this.connectedUsers.get(client.id);
+    console.log('!!!!!!!!!!!!!!!!' + userId);
+    console.log(this.connectedUsers);
 
     const messages = room.chat.slice(
       room.chat.length < limit ? 0 : -limit,
@@ -77,6 +87,7 @@ export class RoomGateway
     client.emit('message', messages);
   }
 
+  // --- sending messages to a room --- //
   @SubscribeMessage('message')
   async onMessage(client: Socket, addMessageDto: AddMessageDto) {
     const userId = this.connectedUsers.get(client.id);
@@ -92,17 +103,20 @@ export class RoomGateway
     await this.roomService.addMessage(addMessageDto);
 
     client.to(room.roomId).emit('message', addMessageDto.message);
+    this.server.emit('message', addMessageDto.message);
   }
 
+  // --- disconnecting the user from the room --- //
   @SubscribeMessage('leave')
   async onRoomLeave(client: Socket, roomId: string) {
     const userId = this.connectedUsers.get(client.id);
 
-    await this.roomService.updateUserRoom(userId, null);
+    await this.roomService.leaveRoom(userId);
 
     client.leave(roomId);
   }
 
+  // --- disconnecting the user from the socket --- //
   async handleDisconnect(client: Socket) {
     this.connectedUsers.delete(client.id);
     console.log(`Client ID: ${client.id} disconection!`);
