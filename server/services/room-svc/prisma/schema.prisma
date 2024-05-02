@@ -57,6 +57,7 @@ model VerificationCode {
 model Room {
     id      String @id @default(uuid())
     ownerId Int
+    name    String
 
     user User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
 

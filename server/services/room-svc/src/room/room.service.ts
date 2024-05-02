@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { AddMessageDto } from './dto/addMessage.dto';
 
 @Injectable()
 export class RoomService {
@@ -34,5 +35,18 @@ export class RoomService {
       update: { roomId },
       create: { userId, roomId },
     });
+  }
+
+  async addMessage(addMessageDto: AddMessageDto) {
+    const { roomId, userId, message } = addMessageDto;
+    const roomMessage = await this.prismaService.chat.create({
+      data: {
+        roomId,
+        userId,
+        message,
+      },
+    });
+
+    return roomMessage;
   }
 }

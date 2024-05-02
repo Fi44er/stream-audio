@@ -23,9 +23,13 @@ export class UserService {
 
   async verifyAccessToken(token: VerifyTokenReq): Promise<JwtPayload> {
     const observablePayload = this.userClient.verifyAccessToken(token);
-    const payload = firstValueFrom(observablePayload).then((jwtPayload) => {
-      return jwtPayload;
-    });
+    const payload: Promise<JwtPayload> = firstValueFrom(observablePayload)
+      .then((jwtPayload: JwtPayload) => {
+        return jwtPayload;
+      })
+      .catch(() => {
+        return;
+      }) as Promise<JwtPayload>;
 
     return payload;
   }

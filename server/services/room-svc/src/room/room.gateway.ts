@@ -8,6 +8,7 @@ import {
 import { RoomService } from './room.service';
 import { UserService } from 'src/user/user.service';
 import { Socket } from 'socket.io';
+import { AddMessageDto } from './dto/addMessage.dto';
 
 @WebSocketGateway({
   cors: {
@@ -31,6 +32,12 @@ export class RoomGateway
   async handleConnection(client: Socket) {
     const token = client.handshake.query.token.toString();
     const payload = await this.userService.verifyAccessToken({ token });
+
+    if (!payload) {
+      client.disconnect(true);
+      return;
+    }
+
     const user = await this.userService.findOne({
       idOrEmail: String(payload.id),
     });
@@ -70,7 +77,33 @@ export class RoomGateway
     client.emit('message', messages);
   }
 
-  handleDisconnect(client: Socket) {
+  @SubscribeMessage('message')
+  async onMessage(client: Socket, addMessageDto: AddMessageDto) {
+    const userId = this.connectedUsers.get(client.id);
+    const room = await this.roomService.getRoomUser(userId);
+
+    if (!room) {
+      return;
+    }
+
+    addMessageDto.userId = userId;
+    addMessageDto.roomId = room.roomId;
+
+    await this.roomService.addMessage(addMessageDto);
+
+    client.to(room.roomId).emit('message', addMessageDto.message);
+  }
+
+  @SubscribeMessage('leave')
+  async onRoomLeave(client: Socket, roomId: string) {
+    const userId = this.connectedUsers.get(client.id);
+
+    await this.roomService.updateUserRoom(userId, null);
+
+    client.leave(roomId);
+  }
+
+  async handleDisconnect(client: Socket) {
     this.connectedUsers.delete(client.id);
     console.log(`Client ID: ${client.id} disconection!`);
   }
