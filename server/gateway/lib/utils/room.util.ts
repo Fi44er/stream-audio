@@ -29,6 +29,8 @@ export async function joinRoom(
 ) {
   client.join(roomId);
   const room = await roomService.findOneWithRelations({ roomId });
+  console.log(room);
+
   if (!room) return;
   await roomService.updateUserRoom({ userId, roomId });
   client.emit('message', getLastMessages(room));
@@ -37,6 +39,7 @@ export async function joinRoom(
 // ---  Get last room messages ---  //
 const getLastMessages = (room: Room): Message[] => {
   const limit = 10;
+  if (!room.chat) return [];
   return room.chat.slice(
     room.chat.length < limit ? 0 : -limit,
     room.chat.length,

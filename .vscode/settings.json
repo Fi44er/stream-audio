@@ -9,5 +9,6 @@
   },
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
-  }
+  },
+  "workbench.editor.tabSizingFixedMinWidth": 50
 }

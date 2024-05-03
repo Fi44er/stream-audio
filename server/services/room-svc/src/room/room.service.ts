@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   Chat,
@@ -36,18 +36,15 @@ export class RoomService {
   async findOneWithRelations(dto: RoomId): Promise<Room> {
     const { roomId } = dto;
     const room = await this.prismaService.room.findFirst({
-      where: {
-        id: {
-          equals: roomId,
-        },
-      },
+      where: { id: roomId },
+
       include: {
         roomUser: true,
         chat: true,
       },
     });
     if (!room) {
-      throw new BadRequestException('Комната не найдена');
+      return;
     }
     return room;
   }

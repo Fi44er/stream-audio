@@ -43,8 +43,6 @@ export class RoomController {
 
   @GrpcMethod('RoomService', 'AddMessage')
   async addMessage(dto: Message): Promise<Chat> {
-    console.log(dto);
-
     return this.roomService.addMessage(dto);
   }
 }
