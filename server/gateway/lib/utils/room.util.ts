@@ -1,25 +1,23 @@
-import { RoomService } from './../src/room/room.service';
-import { IRoom } from 'src/room/interfaces/IRoom';
 import { Socket } from 'socket.io';
-import { AddMessageDto } from 'src/room/dto/addMessage.dto';
-import { IMessage } from 'src/room/interfaces/IMessage';
-import { UserService } from 'src/user/user.service';
-import { UserRes } from 'proto/user_svc';
+import { UserSvcService } from 'src/user-svc/user-svc.service';
+import { UserRes } from 'proto/builds/user_svc';
+import { Message, Room } from 'proto/builds/room_svc';
+import { RoomSvcService } from 'src/room-svc/room-svc.service';
 
 export const addAndEmitMessage = async (
   client: Socket,
   userId: number,
-  addMessageDto: AddMessageDto,
-  roomService: RoomService,
+  message: Message,
+  roomService: RoomSvcService,
 ) => {
-  const room = await roomService.getRoomUser(userId);
+  const room = await roomService.getRoomUser({ userId });
   if (!room) return;
-  addMessageDto.userId = userId;
-  addMessageDto.roomId = room.roomId;
+  message.userId = userId;
+  message.roomId = room.roomId;
 
-  await roomService.addMessage(addMessageDto);
+  await roomService.addMessage(message);
 
-  client.to(room.roomId).emit('message', addMessageDto.message);
+  client.to(room.roomId).emit('message', message.message);
 };
 
 // --- Join user in room --- //
@@ -27,17 +25,17 @@ export async function joinRoom(
   client: Socket,
   roomId: string,
   userId: number,
-  roomService: RoomService,
+  roomService: RoomSvcService,
 ) {
   client.join(roomId);
   const room = await roomService.findOneWithRelations({ roomId });
   if (!room) return;
-  await roomService.updateUserRoom(userId, room.id);
+  await roomService.updateUserRoom({ userId, roomId });
   client.emit('message', getLastMessages(room));
 }
 
 // ---  Get last room messages ---  //
-const getLastMessages = (room: IRoom): IMessage[] => {
+const getLastMessages = (room: Room): Message[] => {
   const limit = 10;
   return room.chat.slice(
     room.chat.length < limit ? 0 : -limit,
@@ -47,7 +45,7 @@ const getLastMessages = (room: IRoom): IMessage[] => {
 
 export const authenticateUser = async (
   client: Socket,
-  userService: UserService,
+  userService: UserSvcService,
 ): Promise<UserRes> => {
   const token = client.handshake.query.token;
   if (!token) {
