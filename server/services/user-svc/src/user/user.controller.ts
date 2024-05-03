@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { UserService } from './user.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { CreateUserReq, FindUSerReq, UserRes } from 'proto/user_svc';
+import { CreateUserReq, FindUSerReq, UserRes } from 'proto/builds/user_svc';
 
 @Controller('user')
 export class UserController {

@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { VerifyTokensService } from './verify-tokens.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { VerifyTokenReq } from 'proto/user_svc';
+import { VerifyTokenReq } from 'proto/builds/user_svc';
 
 @Controller()
 export class VerifyTokensController {

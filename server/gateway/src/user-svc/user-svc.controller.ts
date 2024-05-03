@@ -25,7 +25,7 @@ import {
   VerifyCodeBody,
   VerifyCodeReq,
   VerifyTokenReq,
-} from '../../proto/user_svc';
+} from '../../proto/builds/user_svc';
 import { ClientGrpc } from '@nestjs/microservices';
 import { UserAgent } from 'lib/decorators/userAgent.decorator';
 import { Response } from 'express';

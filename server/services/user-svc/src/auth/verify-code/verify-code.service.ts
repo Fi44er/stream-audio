@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { RpcException } from '@nestjs/microservices';
 import { GenerateTokensService } from 'lib/utils/generate-tokens/generate-tokens.service';
-import { AccessTokenRes, VerifyCodeReq } from 'proto/user_svc';
+import { AccessTokenRes, VerifyCodeReq } from 'proto/builds/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 

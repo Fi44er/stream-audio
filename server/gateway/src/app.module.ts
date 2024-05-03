@@ -4,9 +4,11 @@ import { AppService } from './app.service';
 import { UserSvcModule } from './user-svc/user-svc.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GrpcErrorInterceptor } from 'lib/interceptors/GrpcExceptionFilter.interceptor';
+import { RoomSvcModule } from './room-svc/room-svc.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
-  imports: [UserSvcModule],
+  imports: [UserSvcModule, RoomSvcModule, SocketModule],
   controllers: [AppController],
   providers: [
     AppService,

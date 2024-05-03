@@ -1,0 +1,56 @@
+syntax="proto3";
+package room_svc;
+
+message CreateRoomReq {
+    int32 ownerId = 1;
+    string name = 2;
+}
+
+message CreateRoomRes {
+    string id = 1;
+    int32 ownerId = 2;
+    string name = 3;
+}
+
+message UserId {
+    int32 userId = 1;
+}
+
+message RoomId {
+    string roomId = 1;
+}
+
+message RoomUser {
+    int32 userId = 1;
+    string roomId = 2;
+}
+
+message Chat {
+    int32 id = 1;
+    string message = 2;
+    int32 userId = 3;
+    string roomId = 4;
+}
+
+message Message {
+    string message = 2;
+    int32 userId = 3;
+    string roomId = 4;
+}
+
+message Room {
+    repeated RoomUser roomUser = 1;
+    repeated Chat chat = 2;
+    string id = 3;
+    int32 ownerId = 4;
+    string name = 5;
+}
+
+service RoomService {
+    rpc CreateRoom(CreateRoomReq) returns (CreateRoomRes) {}
+    rpc GetRoomUser(UserId) returns (RoomUser) {}
+    rpc FindOneWithRelations(RoomId) returns (Room) {}
+    rpc UpdateUserRoom(RoomUser) returns (RoomUser) {}
+    rpc LeaveRoom(UserId) returns (RoomUser) {}
+    rpc AddMessage(Message) returns (Chat) {}
+}

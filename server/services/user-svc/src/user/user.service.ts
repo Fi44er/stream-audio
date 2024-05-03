@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { status } from '@grpc/grpc-js';
-import { CreateUserReq, UserRes } from 'proto/user_svc';
+import { CreateUserReq, UserRes } from 'proto/builds/user_svc';
 import { correctEmail, existUser, hashingPassword } from './functions/applied';
 @Injectable()
 export class UserService {

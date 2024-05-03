@@ -2,7 +2,7 @@ import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { generateAndSendVerifyCode } from 'lib/utils/verify-code/generate-and-send-verify-code.util';
-import { RegisterReq, StatusRes } from 'proto/user_svc';
+import { RegisterReq, StatusRes } from 'proto/builds/user_svc';
 import { EmailerService } from 'src/mailer/emailer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 

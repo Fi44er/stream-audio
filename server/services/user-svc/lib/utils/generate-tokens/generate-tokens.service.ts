@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Token, User } from '@prisma/client';
 import { add } from 'date-fns';
-import { AccessTokenRes } from 'proto/user_svc';
+import { AccessTokenRes } from 'proto/builds/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { v4 } from 'uuid';
 import { convertToSecondsUtil } from '../convert-to-seconds';
