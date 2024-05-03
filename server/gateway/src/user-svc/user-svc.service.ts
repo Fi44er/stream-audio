@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
   FindUSerReq,
@@ -7,11 +7,11 @@ import {
   UserRes,
   UserServiceClient,
   VerifyTokenReq,
-} from 'proto/user_svc';
+} from 'proto/builds/user_svc';
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
-export class UserService {
+export class UserSvcService implements OnModuleInit {
   private userClient: UserServiceClient;
 
   constructor(@Inject(USER_SERVICE_NAME) private readonly client: ClientGrpc) {}

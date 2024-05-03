@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { LogoutReq, StatusRes } from 'proto/user_svc';
+import { LogoutReq, StatusRes } from 'proto/builds/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

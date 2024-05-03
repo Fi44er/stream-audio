@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { RegisterReq, StatusRes } from 'proto/user_svc';
+import { RegisterReq, StatusRes } from 'proto/builds/user_svc';
 import { RegisterService } from './register.service';
 
 @Controller('register')

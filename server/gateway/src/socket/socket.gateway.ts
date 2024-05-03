@@ -6,23 +6,26 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { RoomService } from './room.service';
-import { UserService } from 'src/user/user.service';
 import { Socket, Server } from 'socket.io';
-import { AddMessageDto } from './dto/addMessage.dto';
-import { FindOneWithRelationsDto } from './dto/findOneWithRelations.dto';
-import { addAndEmitMessage, authenticateUser, joinRoom } from 'utils/room.util';
+import { RoomSvcService } from 'src/room-svc/room-svc.service';
+import { Message, RoomId } from 'proto/builds/room_svc';
+import { UserSvcService } from 'src/user-svc/user-svc.service';
+import {
+  addAndEmitMessage,
+  authenticateUser,
+  joinRoom,
+} from 'lib/utils/room.util';
 
 @WebSocketGateway({ cors: { origin: '*' } })
-export class RoomGateway
+export class SocketGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
   connectedUsers: Map<string, number> = new Map();
 
   constructor(
-    private readonly roomService: RoomService,
-    private readonly userService: UserService,
+    private readonly roomService: RoomSvcService,
+    private readonly userService: UserSvcService,
   ) {}
 
   afterInit() {
@@ -36,13 +39,13 @@ export class RoomGateway
     this.connectedUsers.set(client.id, user.id);
     console.log(`Client ID: ${client.id} conection!`);
 
-    const room = await this.roomService.getRoomUser(user.id);
+    const room = await this.roomService.getRoomUser({ userId: user.id });
     if (room) return this.onRoomJoin(client, { roomId: room.roomId });
   }
 
   // --- connecting a user to a room --- //
   @SubscribeMessage('join')
-  async onRoomJoin(client: Socket, dto: FindOneWithRelationsDto) {
+  async onRoomJoin(client: Socket, dto: RoomId) {
     const { roomId } = dto;
     const userId = this.connectedUsers.get(client.id);
     await joinRoom(client, roomId, userId, this.roomService);
@@ -50,16 +53,20 @@ export class RoomGateway
 
   // --- sending messages to a room --- //
   @SubscribeMessage('message')
-  async onMessage(client: Socket, addMessageDto: AddMessageDto) {
+  async onMessage(client: Socket, dto: Message) {
     const userId = this.connectedUsers.get(client.id);
-    await addAndEmitMessage(client, userId, addMessageDto, this.roomService);
+
+    await addAndEmitMessage(client, userId, dto, this.roomService);
   }
 
   // --- disconnecting the user from the room --- //
   @SubscribeMessage('leave')
-  async onRoomLeave(client: Socket, roomId: string) {
-    const userId = this.connectedUsers.get(client.id);
-    await this.roomService.leaveRoom(userId);
+  async onRoomLeave(client: Socket, dto: RoomId) {
+    console.log('leave');
+
+    const { roomId } = dto;
+    const idUser = this.connectedUsers.get(client.id);
+    await this.roomService.leaveRoom({ userId: idUser });
     client.leave(roomId);
   }
 

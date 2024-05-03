@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import * as jwt from 'jsonwebtoken';
 import { GenerateTokensService } from 'lib/utils/generate-tokens/generate-tokens.service';
-import { RefreshingReq } from 'proto/user_svc';
+import { RefreshingReq } from 'proto/builds/user_svc';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()

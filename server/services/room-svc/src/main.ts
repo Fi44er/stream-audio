@@ -1,15 +1,21 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { join } from 'path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
-
-  app.enableCors({
-    origin: '*',
-  });
-  await app.listen(3002);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.GRPC,
+      options: {
+        url: '0.0.0.0:3002',
+        package: 'room_svc',
+        protoPath: join(__dirname, '../proto/room_svc.proto'),
+      },
+    },
+  );
+  app.listen();
   console.log('Room service is running on port 3002');
 }
 bootstrap();

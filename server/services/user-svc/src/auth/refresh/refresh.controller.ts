@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { RefreshingReq } from 'proto/user_svc';
+import { RefreshingReq } from 'proto/builds/user_svc';
 import { RefreshService } from './refresh.service';
 
 @Controller('refresh')

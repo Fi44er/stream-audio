@@ -1,15 +1,21 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AddMessageDto } from './dto/addMessage.dto';
-import { CreateRoomDto } from './dto/createRoom.dto';
-import { CreateRoomResponse } from './response/createRoom.response';
-import { FindOneWithRelationsDto } from './dto/findOneWithRelations.dto';
+import {
+  Chat,
+  CreateRoomReq,
+  CreateRoomRes,
+  Message,
+  Room,
+  RoomId,
+  RoomUser,
+  UserId,
+} from 'proto/builds/room_svc';
 
 @Injectable()
 export class RoomService {
   constructor(private readonly prismaService: PrismaService) {}
 
-  async create(dto: CreateRoomDto): Promise<CreateRoomResponse> {
+  async createRoom(dto: CreateRoomReq): Promise<CreateRoomRes> {
     const room = await this.prismaService.room.create({
       data: {
         ownerId: dto.ownerId,
@@ -19,14 +25,15 @@ export class RoomService {
     return room;
   }
 
-  async getRoomUser(userId: number) {
+  async getRoomUser(dto: UserId): Promise<RoomUser> {
+    const { userId } = dto;
     const user = await this.prismaService.roomUser.findUnique({
       where: { userId: userId },
     });
     return user;
   }
 
-  async findOneWithRelations(dto: FindOneWithRelationsDto) {
+  async findOneWithRelations(dto: RoomId): Promise<Room> {
     const { roomId } = dto;
     const room = await this.prismaService.room.findFirst({
       where: {
@@ -45,7 +52,8 @@ export class RoomService {
     return room;
   }
 
-  async updateUserRoom(userId: number, roomId: string) {
+  async updateUserRoom(dto: RoomUser): Promise<RoomUser> {
+    const { userId, roomId } = dto;
     const room = await this.prismaService.roomUser.upsert({
       where: { userId },
       update: { roomId },
@@ -54,7 +62,8 @@ export class RoomService {
     return room;
   }
 
-  async leaveRoom(userId: number) {
+  async leaveRoom(dto: UserId): Promise<RoomUser> {
+    const { userId } = dto;
     const user = await this.prismaService.roomUser.findUnique({
       where: { userId },
     });
@@ -67,8 +76,8 @@ export class RoomService {
     return room;
   }
 
-  async addMessage(addMessageDto: AddMessageDto) {
-    const { roomId, userId, message } = addMessageDto;
+  async addMessage(dto: Message): Promise<Chat> {
+    const { roomId, userId, message } = dto;
     const roomMessage = await this.prismaService.chat.create({
       data: {
         roomId,

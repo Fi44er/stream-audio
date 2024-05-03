@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { compareSync } from 'bcrypt';
 import { generateAndSendVerifyCode } from 'lib/utils/verify-code/generate-and-send-verify-code.util';
-import { LoginReq, StatusRes } from 'proto/user_svc';
+import { LoginReq, StatusRes } from 'proto/builds/user_svc';
 import { EmailerService } from 'src/mailer/emailer.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';

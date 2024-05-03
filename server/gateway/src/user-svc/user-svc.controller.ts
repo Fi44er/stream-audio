@@ -14,7 +14,6 @@ import {
   AccessToken,
   AccessTokenRes,
   CreateUserReq,
-  JwtPayload,
   LoginReq,
   LogoutReq,
   RegisterReq,
@@ -24,8 +23,7 @@ import {
   UserServiceClient,
   VerifyCodeBody,
   VerifyCodeReq,
-  VerifyTokenReq,
-} from '../../proto/user_svc';
+} from '../../proto/builds/user_svc';
 import { ClientGrpc } from '@nestjs/microservices';
 import { UserAgent } from 'lib/decorators/userAgent.decorator';
 import { Response } from 'express';
@@ -120,12 +118,5 @@ export class UserSvcController implements OnModuleInit {
     });
     res.sendStatus(HttpStatus.OK);
     return this.userClient.logout(logoutReq);
-  }
-
-  @Get('verify-access-token')
-  async verifyAccessToken(
-    token: VerifyTokenReq,
-  ): Promise<Observable<JwtPayload>> {
-    return this.userClient.verifyAccessToken(token);
   }
 }
