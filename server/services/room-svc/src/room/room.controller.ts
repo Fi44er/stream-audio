@@ -18,6 +18,7 @@ export class RoomController {
 
   @GrpcMethod('RoomService', 'CreateRoom')
   async createRoom(dto: CreateRoomReq): Promise<CreateRoomRes> {
+    console.log(dto);
     return this.roomService.createRoom(dto);
   }
 

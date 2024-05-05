@@ -7,17 +7,15 @@ import { RoomSvcService } from 'src/room-svc/room-svc.service';
 export const addAndEmitMessage = async (
   client: Socket,
   userId: number,
-  message: Message,
+  message: { message: string },
   roomService: RoomSvcService,
 ) => {
   const room = await roomService.getRoomUser({ userId });
   if (!room) return;
-  message.userId = userId;
-  message.roomId = room.roomId;
+  const dto = { message: message.message, userId, roomId: room.roomId };
+  await roomService.addMessage(dto);
 
-  await roomService.addMessage(message);
-
-  client.to(room.roomId).emit('message', message.message);
+  client.to(room.roomId).emit('message');
 };
 
 // --- Join user in room --- //
@@ -29,7 +27,6 @@ export async function joinRoom(
 ) {
   client.join(roomId);
   const room = await roomService.findOneWithRelations({ roomId });
-  console.log(room);
 
   if (!room) return;
   await roomService.updateUserRoom({ userId, roomId });

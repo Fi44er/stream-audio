@@ -1,4 +1,11 @@
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  NestInterceptor,
+  ExecutionContext,
+  CallHandler,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
@@ -26,7 +33,7 @@ export class GrpcErrorInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
-      catchError(error => {
+      catchError((error) => {
         const errorCode = error.code;
         const httpStatus = this.errorCodeMap[errorCode];
 
@@ -34,8 +41,8 @@ export class GrpcErrorInterceptor implements NestInterceptor {
           throw new HttpException(error.details, httpStatus);
         } else {
           return throwError(error);
-        }        
-      })
+        }
+      }),
     );
   }
 }

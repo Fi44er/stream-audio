@@ -1,4 +1,4 @@
-import { firstValueFrom } from 'rxjs';
+import { catchError, firstValueFrom } from 'rxjs';
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
@@ -47,8 +47,20 @@ export class RoomSvcService implements OnModuleInit {
   }
 
   async addMessage(dto: Message): Promise<Chat> {
-    const observableChat = this.roomClient.addMessage(dto);
-    const chat = firstValueFrom(observableChat);
-    return chat;
+    const observableChat$ = this.roomClient.addMessage(dto);
+    const res = observableChat$
+      .pipe(
+        catchError((err) => {
+          console.log(err);
+          throw Error(err);
+        }),
+      )
+      .subscribe({
+        next(data) {
+          console.log(data);
+        },
+      });
+    // res.unsubscribe();
+    return;
   }
 }

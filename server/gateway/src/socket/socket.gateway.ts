@@ -8,7 +8,7 @@ import {
 } from '@nestjs/websockets';
 import { Socket, Server } from 'socket.io';
 import { RoomSvcService } from 'src/room-svc/room-svc.service';
-import { Message, RoomId } from 'proto/builds/room_svc';
+import { RoomId } from 'proto/builds/room_svc';
 import { UserSvcService } from 'src/user-svc/user-svc.service';
 import {
   addAndEmitMessage,
@@ -53,10 +53,10 @@ export class SocketGateway
 
   // --- sending messages to a room --- //
   @SubscribeMessage('message')
-  async onMessage(client: Socket, dto: Message) {
+  async onMessage(client: Socket, message: { message: string }) {
     const userId = this.connectedUsers.get(client.id);
 
-    await addAndEmitMessage(client, userId, dto, this.roomService);
+    await addAndEmitMessage(client, userId, message, this.roomService);
   }
 
   // --- disconnecting the user from the room --- //
