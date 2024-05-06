@@ -1,16 +1,19 @@
-import { firstValueFrom } from 'rxjs';
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
   Chat,
   Message,
-  ROOM_SERVICE_NAME,
   Room,
+  ROOM_SERVICE_NAME,
   RoomId,
   RoomServiceClient,
   RoomUser,
   UserId,
 } from 'proto/builds/room_svc';
+import { firstValueFrom } from 'rxjs';
+import { observable$ } from './functions/func';
 
 @Injectable()
 export class RoomSvcService implements OnModuleInit {
@@ -47,8 +50,9 @@ export class RoomSvcService implements OnModuleInit {
   }
 
   async addMessage(dto: Message): Promise<Chat> {
-    const observableChat = this.roomClient.addMessage(dto);
-    const chat = firstValueFrom(observableChat);
+    const observableChat$ = this.roomClient.addMessage(dto);
+    const chat = observable$(observableChat$);
+
     return chat;
   }
 }

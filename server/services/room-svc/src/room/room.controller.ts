@@ -1,6 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { RoomService } from './room.service';
-import { GrpcMethod } from '@nestjs/microservices';
+import { GrpcMethod, RpcException } from '@nestjs/microservices';
 import {
   Chat,
   CreateRoomReq,
@@ -11,6 +10,7 @@ import {
   RoomUser,
   UserId,
 } from 'proto/builds/room_svc';
+import { RoomService } from './room.service';
 
 @Controller('room')
 export class RoomController {
@@ -43,6 +43,13 @@ export class RoomController {
 
   @GrpcMethod('RoomService', 'AddMessage')
   async addMessage(dto: Message): Promise<Chat> {
+    if (dto.message === '' || dto.message === null) {
+      const error = new RpcException({
+        message: 'Message is required',
+        code: 3,
+      });
+      throw error;
+    }
     return this.roomService.addMessage(dto);
   }
 }

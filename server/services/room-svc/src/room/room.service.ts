@@ -1,5 +1,5 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
 import {
   Chat,
   CreateRoomReq,
@@ -10,6 +10,7 @@ import {
   RoomUser,
   UserId,
 } from 'proto/builds/room_svc';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RoomService {

@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -9,6 +10,6 @@ async function bootstrap() {
     origin: '*',
   });
   await app.listen(6069);
-  console.log('Gateway is running on port 6069');
+  console.log('localhost:6069');
 }
 bootstrap();

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
@@ -6,15 +7,15 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket, Server } from 'socket.io';
-import { RoomSvcService } from 'src/room-svc/room-svc.service';
-import { Message, RoomId } from 'proto/builds/room_svc';
-import { UserSvcService } from 'src/user-svc/user-svc.service';
 import {
   addAndEmitMessage,
   authenticateUser,
   joinRoom,
 } from 'lib/utils/room.util';
+import { Message, RoomId } from 'proto/builds/room_svc';
+import { Server, Socket } from 'socket.io';
+import { RoomSvcService } from 'src/room-svc/room-svc.service';
+import { UserSvcService } from 'src/user-svc/user-svc.service';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class SocketGateway
