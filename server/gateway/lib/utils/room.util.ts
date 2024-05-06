@@ -1,8 +1,9 @@
-import { Socket } from 'socket.io';
-import { UserSvcService } from 'src/user-svc/user-svc.service';
-import { UserRes } from 'proto/builds/user_svc';
+/* eslint-disable prettier/prettier */
 import { Message, Room } from 'proto/builds/room_svc';
+import { UserRes } from 'proto/builds/user_svc';
+import { Socket } from 'socket.io';
 import { RoomSvcService } from 'src/room-svc/room-svc.service';
+import { UserSvcService } from 'src/user-svc/user-svc.service';
 
 export const addAndEmitMessage = async (
   client: Socket,
@@ -29,7 +30,6 @@ export async function joinRoom(
 ) {
   client.join(roomId);
   const room = await roomService.findOneWithRelations({ roomId });
-  console.log(room);
 
   if (!room) return;
   await roomService.updateUserRoom({ userId, roomId });
