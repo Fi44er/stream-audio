@@ -14,7 +14,7 @@ export function grpcErrTOHttpErr({
   throw new HttpException(messager, httpStatus);
 }
 
-export function observable$<T>(elem: Observable<T>): Promise<T> {
+export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
   const observable$ = elem
     .pipe(
       catchError((error: ServiceError) => {

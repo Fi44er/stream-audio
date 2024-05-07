@@ -1,5 +1,3 @@
-/* eslint-disable prettier/prettier */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
@@ -13,7 +11,7 @@ import {
   UserId,
 } from 'proto/builds/room_svc';
 import { firstValueFrom } from 'rxjs';
-import { observable$ } from './functions/func';
+import { rpcErrorHandling$ } from './functions/rpcErrorHandling';
 
 @Injectable()
 export class RoomSvcService implements OnModuleInit {
@@ -26,8 +24,8 @@ export class RoomSvcService implements OnModuleInit {
   }
 
   async getRoomUser(dto: UserId): Promise<RoomUser> {
-    const observableRoomUser = this.roomClient.getRoomUser(dto);
-    const roomUser = await firstValueFrom(observableRoomUser);
+    const observableRoomUser$ = this.roomClient.getRoomUser(dto);
+    const roomUser = firstValueFrom(observableRoomUser$);
     return roomUser;
   }
 
@@ -45,13 +43,13 @@ export class RoomSvcService implements OnModuleInit {
 
   async leaveRoom(dto: UserId): Promise<RoomUser> {
     const observableRoomUser = this.roomClient.leaveRoom(dto);
-    const roomUser = firstValueFrom(observableRoomUser);
+    const roomUser = rpcErrorHandling$(observableRoomUser);
     return roomUser;
   }
 
   async addMessage(dto: Message): Promise<Chat> {
     const observableChat$ = this.roomClient.addMessage(dto);
-    const chat = observable$(observableChat$);
+    const chat = rpcErrorHandling$(observableChat$);
 
     return chat;
   }
