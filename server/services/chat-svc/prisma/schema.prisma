@@ -3,12 +3,88 @@
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// "gen:schema": "awk 1 ./prisma/schemas/*.prisma > ./prisma/schema.prisma && npx prisma format",
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id       Int    @id @default(autoincrement())
+    email    String @unique
+    password String
+    role     Roles  @default(USER)
+
+    token    Token[]
+    room     Room[]
+    roomUser RoomUser[]
+    chat     Chat[]
+
+    @@map("users")
+}
+
+enum Roles {
+    ADMIN
+    USER
+}
+
+model Token {
+    id        Int      @id @default(autoincrement())
+    token     String   @unique
+    exp       DateTime
+    userId    Int
+    userAgent String   @map("user_agent")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    @@map("tokens")
+}
+
+model VerificationCode {
+    id        Int      @id @default(autoincrement())
+    email     String   @unique
+    code      Int
+    createdAt DateTime @map("created-at")
+
+    @@map("verification-code")
+}
+
+model Room {
+    id      String @id @default(uuid())
+    ownerId Int
+    name    String
+
+    user User @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+
+    roomUser RoomUser[]
+    chat     Chat[]
+
+    @@map("rooms")
+}
+
+model RoomUser {
+    userId Int    @unique @map("user-id")
+    roomId String @map("room-id")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+    @@map("room-users")
+}
+
+model Chat {
+    id      Int    @id @default(autoincrement())
+    message String
+    userId  Int    @map("user-id")
+    roomId  String @map("room-id")
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+    @@map("chat")
 }

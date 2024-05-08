@@ -1,10 +1,8 @@
 /* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import {
-  Chat,
   CreateRoomReq,
   CreateRoomRes,
-  Message,
   Room,
   RoomId,
   RoomUser,
@@ -72,17 +70,5 @@ export class RoomService {
       where: { userId },
     });
     return room;
-  }
-
-  async addMessage(dto: Message): Promise<Chat> {
-    const { roomId, userId, message } = dto;
-    const roomMessage = await this.prismaService.chat.create({
-      data: {
-        roomId,
-        userId,
-        message,
-      },
-    });
-    return roomMessage;
   }
 }

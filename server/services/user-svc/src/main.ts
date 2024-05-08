@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { join } from 'path';
 import { AppModule } from './app.module';
+import { ValidationPipeWithRpcException } from 'lib/pipe/validationPipeWithRpcException';
 
 async function bootstrap() {
   const app = await NestFactory.createMicroservice<MicroserviceOptions>(
@@ -15,6 +16,7 @@ async function bootstrap() {
       },
     },
   );
+  app.useGlobalPipes(ValidationPipeWithRpcException());
   app.listen();
   console.log('User service is running on port 3001');
 }

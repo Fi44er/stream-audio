@@ -25,19 +25,6 @@ message RoomUser {
     string roomId = 2;
 }
 
-message Chat {
-    int32 id = 1;
-    string message = 2;
-    int32 userId = 3;
-    string roomId = 4;
-}
-
-message Message {
-    string message = 2;
-    int32 userId = 3;
-    string roomId = 4;
-}
-
 message Room {
     repeated RoomUser roomUser = 1;
     repeated Chat chat = 2;
@@ -46,11 +33,17 @@ message Room {
     string name = 5;
 }
 
+message Chat {
+    int32 id = 1;
+    string message = 2;
+    int32 userId = 3;
+    string roomId = 4;
+}
+
 service RoomService {
     rpc CreateRoom(CreateRoomReq) returns (CreateRoomRes) {}
     rpc GetRoomUser(UserId) returns (RoomUser) {}
     rpc FindOneWithRelations(RoomId) returns (Room) {}
     rpc UpdateUserRoom(RoomUser) returns (RoomUser) {}
     rpc LeaveRoom(UserId) returns (RoomUser) {}
-    rpc AddMessage(Message) returns (Chat) {}
 }

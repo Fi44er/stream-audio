@@ -6,9 +6,10 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { GrpcErrorInterceptor } from 'lib/interceptors/grpcExceptionFilter.interceptor';
 import { RoomSvcModule } from './room-svc/room-svc.module';
 import { SocketModule } from './socket/socket.module';
+import { ChatSvcModule } from './chat-svc/chat-svc.module';
 
 @Module({
-  imports: [UserSvcModule, RoomSvcModule, SocketModule],
+  imports: [UserSvcModule, RoomSvcModule, SocketModule, ChatSvcModule],
   controllers: [AppController],
   providers: [
     AppService,

@@ -1,8 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
-  Chat,
-  Message,
   Room,
   ROOM_SERVICE_NAME,
   RoomId,
@@ -11,7 +9,7 @@ import {
   UserId,
 } from 'proto/builds/room_svc';
 import { firstValueFrom } from 'rxjs';
-import { rpcErrorHandling$ } from './functions/rpcErrorHandling';
+import { rpcErrorHandling$ } from '../../lib/utils/rpcErrorHandling';
 
 @Injectable()
 export class RoomSvcService implements OnModuleInit {
@@ -45,12 +43,5 @@ export class RoomSvcService implements OnModuleInit {
     const observableRoomUser = this.roomClient.leaveRoom(dto);
     const roomUser = rpcErrorHandling$(observableRoomUser);
     return roomUser;
-  }
-
-  async addMessage(dto: Message): Promise<Chat> {
-    const observableChat$ = this.roomClient.addMessage(dto);
-    const chat = rpcErrorHandling$(observableChat$);
-
-    return chat;
   }
 }

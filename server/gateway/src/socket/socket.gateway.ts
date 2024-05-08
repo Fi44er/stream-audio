@@ -7,15 +7,14 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import {
-  addAndEmitMessage,
-  authenticateUser,
-  joinRoom,
-} from 'lib/utils/room.util';
-import { Message, RoomId } from 'proto/builds/room_svc';
+import { authenticateUser, joinRoom } from 'src/socket/functions/room';
+import { Message } from 'proto/builds/chat_svc';
+import { RoomId } from 'proto/builds/room_svc';
 import { Server, Socket } from 'socket.io';
 import { RoomSvcService } from 'src/room-svc/room-svc.service';
 import { UserSvcService } from 'src/user-svc/user-svc.service';
+import { ChatSvcService } from 'src/chat-svc/chat-svc.service';
+import { addAndEmitMessage } from './functions/chat';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class SocketGateway
@@ -27,6 +26,7 @@ export class SocketGateway
   constructor(
     private readonly roomService: RoomSvcService,
     private readonly userService: UserSvcService,
+    private readonly chatSvcService: ChatSvcService,
   ) {}
 
   afterInit() {
@@ -57,7 +57,13 @@ export class SocketGateway
   async onMessage(client: Socket, dto: Message) {
     const userId = this.connectedUsers.get(client.id);
 
-    await addAndEmitMessage(client, userId, dto, this.roomService);
+    await addAndEmitMessage(
+      client,
+      userId,
+      dto,
+      this.roomService,
+      this.chatSvcService,
+    );
   }
 
   // --- disconnecting the user from the room --- //

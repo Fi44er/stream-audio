@@ -1,14 +1,15 @@
 import { Controller } from '@nestjs/common';
 import { VerifyTokensService } from './verify-tokens.service';
 import { GrpcMethod } from '@nestjs/microservices';
-import { VerifyTokenReq } from 'proto/builds/user_svc';
+import { VerifyTokenDto } from '../dto/VerifyToken.dto';
+import { JwtPayload } from 'proto/builds/user_svc';
 
 @Controller()
 export class VerifyTokensController {
   constructor(private readonly verifyTokensService: VerifyTokensService) {}
 
   @GrpcMethod('UserService', 'verifyAccessToken')
-  async verifyAccessToken(token: VerifyTokenReq) {
+  async verifyAccessToken(token: VerifyTokenDto): Promise<JwtPayload> {
     return this.verifyTokensService.verifyAccessToken(token.token);
   }
 }
