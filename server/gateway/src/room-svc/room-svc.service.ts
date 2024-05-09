@@ -23,13 +23,13 @@ export class RoomSvcService implements OnModuleInit {
 
   async getRoomUser(dto: UserId): Promise<RoomUser> {
     const observableRoomUser$ = this.roomClient.getRoomUser(dto);
-    const roomUser = firstValueFrom(observableRoomUser$);
+    const roomUser = rpcErrorHandling$(observableRoomUser$);
     return roomUser;
   }
 
   async findOneWithRelations(dto: RoomId): Promise<Room> {
-    const observableRoom = this.roomClient.findOneWithRelations(dto);
-    const room = firstValueFrom(observableRoom);
+    const observableRoom$ = this.roomClient.findOneWithRelations(dto);
+    const room = rpcErrorHandling$(observableRoom$);
     return room;
   }
 

@@ -13,10 +13,11 @@ export async function joinRoom(
   userId: number,
   roomService: RoomSvcService,
 ) {
-  client.join(roomId);
   const room = await roomService.findOneWithRelations({ roomId });
 
-  if (!room) return;
+  // if (!room) return;
+
+  client.join(roomId);
   await roomService.updateUserRoom({ userId, roomId });
   client.emit('message', getLastMessages(room));
 }

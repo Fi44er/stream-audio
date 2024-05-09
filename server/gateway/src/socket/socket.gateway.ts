@@ -36,11 +36,13 @@ export class SocketGateway
   // --- connecting a user to a socket --- //
   async handleConnection(client: Socket) {
     const user = await authenticateUser(client, this.userService);
+
     if (!user) return;
     this.connectedUsers.set(client.id, user.id);
     console.log(`Client ID: ${client.id} conection!`);
 
     const room = await this.roomService.getRoomUser({ userId: user.id });
+
     if (room) return this.onRoomJoin(client, { roomId: room.roomId });
   }
 

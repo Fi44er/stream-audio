@@ -9,9 +9,8 @@ export function grpcErrTOHttpErr({
   code,
   message,
 }: ServiceError): HttpException {
-  const messager = message.replace(/^3 INVALID_ARGUMENT: /, '');
   const httpStatus = errorCodeMap[code];
-  throw new HttpException(messager, httpStatus);
+  throw new HttpException(message, httpStatus);
 }
 
 export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {

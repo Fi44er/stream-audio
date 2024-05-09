@@ -1,5 +1,7 @@
 /* eslint-disable prettier/prettier */
+import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import {
   CreateRoomReq,
   CreateRoomRes,
@@ -29,11 +31,20 @@ export class RoomService {
     const user = await this.prismaService.roomUser.findUnique({
       where: { userId: userId },
     });
+
+    if (!user) {
+      throw new RpcException({
+        message: 'Room not found',
+        code: status.NOT_FOUND,
+      });
+    }
+
     return user;
   }
 
   async findOneWithRelations(dto: RoomId): Promise<Room> {
     const { roomId } = dto;
+
     const room = await this.prismaService.room.findFirst({
       where: { id: roomId },
 
@@ -42,14 +53,20 @@ export class RoomService {
         chat: true,
       },
     });
+
     if (!room) {
-      return;
+      throw new RpcException({
+        message: 'Room not found',
+        code: status.NOT_FOUND,
+      });
     }
+
     return room;
   }
 
   async updateUserRoom(dto: RoomUser): Promise<RoomUser> {
     const { userId, roomId } = dto;
+
     const room = await this.prismaService.roomUser.upsert({
       where: { userId },
       update: { roomId },
