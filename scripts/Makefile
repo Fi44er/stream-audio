@@ -10,10 +10,9 @@ build-proto:
     
 
 start-all-services:
-	@for dir in $$(find ../server/services -maxdepth 1 -type d); do \
+	@for dir in $$(find ../server/apps -maxdepth 1 -type d); do \
 	gnome-terminal -- bash -c "cd $${dir} && yarn start:dev"; \
 	done; \
-	gnome-terminal -- bash -c "cd ../server/gateway && yarn start:dev"
 
 change-all-prisma:
 	@for dir in ../server/services/*/; do \
