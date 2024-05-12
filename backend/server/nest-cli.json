@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/gateway/src",
+  "compilerOptions": {
+    "deleteOutDir": true,
+    "webpack": true,
+    "tsConfigPath": "apps/gateway/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/gateway",
+  "projects": {
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.app.json",
+        "watchAssets": true,
+        "assets": [
+          {
+            "include": "../proto/*.proto",
+            "outDir": "./dist/apps/gateway/proto"
+          }
+        ]
+      }
+    },
+    "chat-svc": {
+      "type": "application",
+      "root": "apps/chat-svc",
+      "entryFile": "main",
+      "sourceRoot": "apps/chat-svc/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/chat-svc/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "../proto/*.proto",
+            "outDir": "./dist/apps/chat-svc/proto"
+          }
+        ],
+        "watchAssets": true
+      }
+    },
+    "user-svc": {
+      "type": "application",
+      "root": "apps/user-svc",
+      "entryFile": "main",
+      "sourceRoot": "apps/user-svc/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/user-svc/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "../proto/*.proto",
+            "outDir": "./dist/apps/user-svc/proto"
+          },
+          {
+            "include": "./mailer/templates/*.hbs",
+            "outDir": "./dist/apps/user-svc/proto"
+          }
+        ],
+        "watchAssets": true
+      }
+    },
+    "room-svc": {
+      "type": "application",
+      "root": "apps/room-svc",
+      "entryFile": "main",
+      "sourceRoot": "apps/room-svc/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/room-svc/tsconfig.app.json",
+        "assets": [
+          {
+            "include": "../proto/*.proto",
+            "outDir": "./dist/apps/room-svc/proto"
+          }
+        ],
+        "watchAssets": true
+      }
+    }
+  }
+}

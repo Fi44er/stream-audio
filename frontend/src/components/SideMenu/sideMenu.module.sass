@@ -1,0 +1,33 @@
+@mixin PagesItem()
+  display: flex
+  flex-direction: row
+  font-weight: 500
+  font-size: 24px
+  gap: 15px
+  text-decoration: none
+  & > *
+    transition: 0.3s
+    color: #CADFFF
+    width: max-content
+    height: 35px
+    > path
+      transition: 0.3s
+      stroke: #CADFFF
+  &:hover
+    & > *, path
+      color: #8E9EB5
+      stroke: #8E9EB5
+
+.sideMenu
+  display: flex
+  background-color: #181818
+  position: fixed
+  width: 241px
+  height: 93vh
+  padding: 30px 15px
+  .pages
+    display: grid
+    gap: 15px
+    grid-template-rows: repeat(auto-fit, 35px)
+    .home, .room
+      @include PagesItem
