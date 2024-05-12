@@ -14,6 +14,7 @@ export async function joinRoom(
   roomService: RoomSvcService,
 ) {
   client.join(roomId);
+
   const room = await roomService.findOneWithRelations({ roomId });
 
   if (!room) return;

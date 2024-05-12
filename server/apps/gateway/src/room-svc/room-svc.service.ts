@@ -29,7 +29,7 @@ export class RoomSvcService implements OnModuleInit {
 
   async findOneWithRelations(dto: RoomId): Promise<Room> {
     const observableRoom = this.roomClient.findOneWithRelations(dto);
-    const room = firstValueFrom(observableRoom);
+    const room = rpcErrorHandling$(observableRoom);
     return room;
   }
 

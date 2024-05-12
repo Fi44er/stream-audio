@@ -1,8 +1,8 @@
 import { ServiceError } from '@grpc/grpc-js';
 import { HttpException } from '@nestjs/common';
 import { log } from 'console';
-import { errorCodeMap } from 'apps/gateway/lib/const/ErrorCodeMap';
-import { catchError, Observable, timer } from 'rxjs';
+import { catchError, Observable } from 'rxjs';
+import { errorCodeMap } from '../const/ErrorCodeMap';
 
 export function grpcErrTOHttpErr({
   code,
@@ -10,29 +10,41 @@ export function grpcErrTOHttpErr({
 }: ServiceError): HttpException {
   const messager = message.replace(/^3 INVALID_ARGUMENT: /, '');
   const httpStatus = errorCodeMap[code];
-  throw new HttpException(messager, httpStatus);
+  return new HttpException(messager, httpStatus);
 }
 
 export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
-  const observable$ = elem
-    .pipe(
-      catchError((error: ServiceError) => {
-        throw grpcErrTOHttpErr(error);
-      }),
-    )
-    .subscribe({
-      error: (error) => {
-        log({
-          error: error.message,
-          code: error.status,
-        });
-      },
-      next: (res) => log(res),
-    });
+  return new Promise((resolve, reject) => {
+    const subscription = elem
+      .pipe(
+        catchError((error: ServiceError) => {
+          log({
+            error: error.message,
+            code: error.code,
+          });
+          reject(grpcErrTOHttpErr(error));
+          return [];
+        }),
+      )
+      .subscribe({
+        error: (error) => {
+          reject({
+            error: error.message,
+            code: error.status,
+          });
+        },
+        next: (res) => {
+          log(res);
+          resolve(res);
+        },
+      });
 
-  timer(15 * 60 * 1000).subscribe(() => {
-    observable$.unsubscribe();
-    log('Observable unsubscribed');
+    setTimeout(
+      () => {
+        subscription.unsubscribe();
+        log('Observable unsubscribed');
+      },
+      15 * 60 * 1000,
+    );
   });
-  return;
 }
