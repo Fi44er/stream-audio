@@ -2,16 +2,21 @@
   display: flex
   flex-direction: row
   font-weight: 500
-  font-size: 24px
+  font-size: 20px
   gap: 15px
   text-decoration: none
+  align-items: center
+
   & > *
     transition: 0.3s
     color: #CADFFF
+    line-height: 24px
     width: max-content
-    height: 35px
+    stroke: #CADFFF
+    height: 24px
     > path
       transition: 0.3s
+      height: 24px
       stroke: #CADFFF
   &:hover
     & > *, path
@@ -23,11 +28,11 @@
   background-color: #181818
   position: fixed
   width: 241px
-  height: 93vh
+  height: 100vh
   padding: 30px 15px
   .pages
     display: grid
     gap: 15px
     grid-template-rows: repeat(auto-fit, 35px)
-    .home, .room
+    .home, .room, .auth
       @include PagesItem
