@@ -21,7 +21,6 @@ export class ChatSvcService implements OnModuleInit {
   async addMessage(dto: Message): Promise<Chat> {
     const observableChat$ = this.chatClient.addMessage(dto);
     const chat = rpcErrorHandling$(observableChat$);
-
     return chat;
   }
 }

@@ -7,7 +7,7 @@ import { Chat } from 'apps/chat-svc/proto/builds/chat_svc';
 @Controller()
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
-  @GrpcMethod('RoomService', 'AddMessage')
+  @GrpcMethod('ChatService', 'AddMessage')
   async addMessage(dto: MessageDto): Promise<Chat> {
     return this.chatService.addMessage(dto);
   }
