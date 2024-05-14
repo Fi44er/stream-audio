@@ -1,10 +1,10 @@
 import { Message } from 'apps/gateway/proto/builds/chat_svc';
-import { Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { RoomSvcService } from '../../room-svc/room-svc.service';
 import { ChatSvcService } from '../../chat-svc/chat-svc.service';
 
 export const addAndEmitMessage = async (
-  client: Socket,
+  server: Server,
   userId: number,
   message: Message,
   roomService: RoomSvcService,
@@ -17,5 +17,5 @@ export const addAndEmitMessage = async (
 
   await chatSvcService.addMessage(message);
 
-  client.to(room.roomId).emit('message', message.message);
+  server.to(room.roomId).emit('message', message.message);
 };

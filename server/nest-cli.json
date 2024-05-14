@@ -4,7 +4,6 @@
   "sourceRoot": "apps/gateway/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
     "tsConfigPath": "apps/gateway/tsconfig.app.json"
   },
   "monorepo": true,
@@ -45,7 +44,7 @@
     "user-svc": {
       "type": "application",
       "root": "apps/user-svc",
-      "entryFile": "main",
+      "entryFile": "src/main",
       "sourceRoot": "apps/user-svc/src",
       "compilerOptions": {
         "tsConfigPath": "apps/user-svc/tsconfig.app.json",
@@ -65,7 +64,7 @@
     "room-svc": {
       "type": "application",
       "root": "apps/room-svc",
-      "entryFile": "main",
+      "entryFile": "src/main",
       "sourceRoot": "apps/room-svc/src",
       "compilerOptions": {
         "tsConfigPath": "apps/room-svc/tsconfig.app.json",
@@ -87,7 +86,8 @@
         "tsConfigPath": "apps/audio-svc/tsconfig.app.json",
         "assets": [
           {
-            "include": "./tracks/*.mp3"
+            "include": "./tracks/*.mp3",
+            "outDir": "./dist/apps/audio-svc/tracks"
           }
         ],
         "watchAssets": true

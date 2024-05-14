@@ -60,7 +60,7 @@ export class SocketGateway
     const userId = this.connectedUsers.get(client.id);
 
     await addAndEmitMessage(
-      client,
+      this.server,
       userId,
       dto,
       this.roomService,
