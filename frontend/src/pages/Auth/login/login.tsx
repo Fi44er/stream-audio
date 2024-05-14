@@ -21,8 +21,10 @@ export const Login = (): JSX.Element => {
 			console.log(code);
 			axios.post<IStateLogin>('http://localhost:6069/user-svc/verify-code', {...stateLogin, code}).then(res => {
 				console.log(res.data);
+				if (res.status === 201) {
+					router.navigate({to: '/'});
+				}
 			});
-			router.navigate({to: '/'});
 		}
 
 		axios.post<IStateLogin>('http://localhost:6069/user-svc/login', stateLogin).then(res => {
@@ -36,7 +38,6 @@ export const Login = (): JSX.Element => {
 		const state = getUser();
 		const values = Object.values(state);
 		const keys = Object.keys(state);
-
 		for (let i = 0; i < values.length; i++) {
 			if (values[i] === '' && keys[i] !== null) {
 				return false;

@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {useRouter} from '@tanstack/react-router';
+import axios from 'axios';
 import {useState} from 'react';
 import {Form} from '../../../components/Form/form';
 import {useAuthState} from '../../../state/authState';
@@ -7,20 +10,29 @@ import {IStateRegister} from './types/types';
 export const Registeration = (): JSX.Element => {
 	const {getUser, setUser} = useAuthState();
 	const router = useRouter();
-	const [stateLogin, setStateLogin] = useState<IStateRegister>({
+	const [stateReg, setStateReg] = useState<IStateRegister>({
 		email: '',
 		password: '',
 		passwordRepeat: '',
 	});
 	const [code, setCode] = useState<number>();
+
 	function reg(step: number) {
 		if (step === 1 && checkState()) {
-			console.log(code);
-			// Логика ответа сервера
-			router.navigate({to: '/'});
+			const {passwordRepeat, ...registerData} = stateReg;
+			axios.post<IStateRegister>('http://localhost:6069/user-svc/verify-code', {...registerData, code}).then(res => {
+				console.log(res.data);
+				if (res.status === 201) {
+					router.navigate({to: '/'});
+				}
+			});
 		}
 
-		setUser(stateLogin);
+		axios.post<IStateRegister>('http://localhost:6069/user-svc/register', stateReg).then(res => {
+			if (res.status === 201) {
+				setUser(stateReg);
+			}
+		});
 	}
 
 	const checkState = (): boolean => {
@@ -47,9 +59,9 @@ export const Registeration = (): JSX.Element => {
 						</>
 					) : (
 						<>
-							<input key='email' type='text' placeholder='Email' onChange={e => setStateLogin({...stateLogin, email: e.target.value})} />
-							<input key='password' type='text' placeholder='Password' onChange={e => setStateLogin({...stateLogin, password: e.target.value})} />
-							<input key='passwordRepeat' type='text' placeholder='Repeat password' onChange={e => setStateLogin({...stateLogin, passwordRepeat: e.target.value})} />
+							<input key='email' type='text' placeholder='Email' onChange={e => setStateReg({...stateReg, email: e.target.value})} />
+							<input key='password' type='text' placeholder='Password' onChange={e => setStateReg({...stateReg, password: e.target.value})} />
+							<input key='passwordRepeat' type='text' placeholder='Repeat password' onChange={e => setStateReg({...stateReg, passwordRepeat: e.target.value})} />
 						</>
 					)
 				}
