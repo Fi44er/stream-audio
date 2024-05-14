@@ -13,7 +13,7 @@ import { CHAT_SERVICE_NAME } from 'apps/gateway/proto/builds/chat_svc';
         options: {
           url: '0.0.0.0:3003',
           package: 'chat_svc',
-          protoPath: resolve(__dirname, './proto/chat_svc.proto'),
+          protoPath: resolve(__dirname, '../../proto/chat_svc.proto'),
         },
       },
     ]),

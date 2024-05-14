@@ -11,7 +11,7 @@ async function bootstrap() {
       options: {
         url: '0.0.0.0:3003',
         package: 'chat_svc',
-        protoPath: join(__dirname, './proto/chat_svc.proto'),
+        protoPath: join(__dirname, '../proto/chat_svc.proto'),
       },
     },
   );

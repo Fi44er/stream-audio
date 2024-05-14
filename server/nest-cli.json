@@ -12,7 +12,7 @@
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
-      "entryFile": "main",
+      "entryFile": "src/main",
       "sourceRoot": "apps/gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/gateway/tsconfig.app.json",
@@ -28,7 +28,7 @@
     "chat-svc": {
       "type": "application",
       "root": "apps/chat-svc",
-      "entryFile": "main",
+      "entryFile": "src/main",
       "sourceRoot": "apps/chat-svc/src",
       "compilerOptions": {
         "tsConfigPath": "apps/chat-svc/tsconfig.app.json",

@@ -14,7 +14,7 @@ import { ROOM_SERVICE_NAME } from 'apps/gateway/proto/builds/room_svc';
         options: {
           url: '0.0.0.0:3002',
           package: 'room_svc',
-          protoPath: resolve(__dirname, './proto/room_svc.proto'),
+          protoPath: resolve(__dirname, '../../proto/room_svc.proto'),
         },
       },
     ]),

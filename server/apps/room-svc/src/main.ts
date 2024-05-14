@@ -11,7 +11,7 @@ async function bootstrap() {
       options: {
         url: '0.0.0.0:3002',
         package: 'room_svc',
-        protoPath: join(__dirname, './proto/room_svc.proto'),
+        protoPath: join(__dirname, '../proto/room_svc.proto'),
       },
     },
   );

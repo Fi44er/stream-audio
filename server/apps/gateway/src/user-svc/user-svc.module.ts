@@ -14,7 +14,7 @@ import { UserSvcService } from './user-svc.service';
         options: {
           url: '0.0.0.0:3001',
           package: 'user_svc',
-          protoPath: resolve(__dirname, './proto/user_svc.proto'),
+          protoPath: resolve(__dirname, '../../proto/user_svc.proto'),
         },
       },
     ]),
