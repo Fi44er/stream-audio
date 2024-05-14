@@ -1,5 +1,6 @@
 
 import {useRouter} from '@tanstack/react-router';
+import axios from 'axios';
 import {useState} from 'react';
 import {Form} from '../../../components/Form/form';
 import {useAuthState} from '../../../state/authState';
@@ -7,6 +8,7 @@ import style from './login.module.sass';
 import {IStateLogin} from './types/types';
 export const Login = (): JSX.Element => {
 	const {getUser, setUser} = useAuthState();
+
 	const router = useRouter();
 	const [stateLogin, setStateLogin] = useState<IStateLogin>({
 		email: '',
@@ -17,11 +19,17 @@ export const Login = (): JSX.Element => {
 	function login(step: number) {
 		if (step === 1 && checkState()) {
 			console.log(code);
-			// Логика ответа сервера
+			axios.post<IStateLogin>('http://localhost:6069/user-svc/verify-code', {...stateLogin, code}).then(res => {
+				console.log(res.data);
+			});
 			router.navigate({to: '/'});
 		}
 
-		setUser(stateLogin);
+		axios.post<IStateLogin>('http://localhost:6069/user-svc/login', stateLogin).then(res => {
+			if (res.status === 201) {
+				setUser(stateLogin);
+			}
+		});
 	}
 
 	const checkState = (): boolean => {
