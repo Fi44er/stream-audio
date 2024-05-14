@@ -7,13 +7,30 @@
   justify-content: space-between
   padding: 30px
   gap: 30px
-  background-color: #f1f1f1
+  background-color: #181818
   border-radius: 15px
+  position: relative
+  z-index: 2
+  .blur
+    position: absolute
+    width: 100%
+    pointer-events: none
+    bottom: 0
+    height: 100%
+    z-index: 0
+    -moz-user-select: -moz-none
+    -khtml-user-select: none
+    -webkit-user-select: none
+    -o-user-select: none
+    user-select: none
+  > h2
+    color: #CADFFF
   .inputs
     width: 100%
     display: grid
     grid-template-rows: repeat(auto-fit, auto)
     gap: 15px
+    z-index: 1
     justify-content: center
     > input
       all: unset
@@ -28,11 +45,12 @@
         color: black
   .button
     all: unset
-    background-color: #1b1b1b
+    background-color: #CADFFF
     border-radius: 5px
     width: max-content
     height: 40px
     padding: 5px 15px
     text-align: left
-    color: white
+    color: black
     cursor: pointer
+    z-index: 1
