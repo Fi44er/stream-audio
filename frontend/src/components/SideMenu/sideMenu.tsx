@@ -8,7 +8,7 @@ export const SideMenu = (): JSX.Element => {
 	const {getUser} = useAuthState();
 	const state = getUser();
 	function checkState(): boolean {
-		if (state.email === '' || state.password === '' || state.passwordRepeat === '') {
+		if (state.email === '' || state.password === '') {
 			return false;
 		}
 
@@ -32,7 +32,7 @@ export const SideMenu = (): JSX.Element => {
 				<div className={style.pages}>
 					<div className={style.auth}>
 						<AuthIcon/>
-						<Link to='/auth/login'>Авторизация</Link>
+						<Link to='/auth/registration'>Вход</Link>
 					</div>
 				</div>
 			)}

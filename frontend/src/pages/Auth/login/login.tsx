@@ -11,8 +11,8 @@ export const Login = (): JSX.Element => {
 	const [stateLogin, setStateLogin] = useState<IStateLogin>({
 		email: '',
 		password: '',
-		passwordRepeat: '',
 	});
+
 	const [code, setCode] = useState<number>();
 	function login(step: number) {
 		if (step === 1 && checkState()) {
@@ -26,8 +26,13 @@ export const Login = (): JSX.Element => {
 
 	const checkState = (): boolean => {
 		const state = getUser();
-		if (state.email === '' || state.password === '' || state.passwordRepeat === '') {
-			return false;
+		const values = Object.values(state);
+		const keys = Object.keys(state);
+
+		for (let i = 0; i < values.length; i++) {
+			if (values[i] === '' && keys[i] !== null) {
+				return false;
+			}
 		}
 
 		return true;
@@ -35,7 +40,7 @@ export const Login = (): JSX.Element => {
 
 	return (
 		<div className={style.pageLogin}>
-			<Form title='Регистрация' onClick={login.bind(null, 1) }>
+			<Form title='Авторизация' onClick={login.bind(null, 1) }>
 				{
 					checkState() ? (
 						<>
@@ -45,7 +50,6 @@ export const Login = (): JSX.Element => {
 						<>
 							<input key='email' type='text' placeholder='Email' onChange={e => setStateLogin({...stateLogin, email: e.target.value})} />
 							<input key='password' type='text' placeholder='Password' onChange={e => setStateLogin({...stateLogin, password: e.target.value})}/>
-							<input key='passwordRepeat' type='text' placeholder='PasswordRepeat' onChange={e => setStateLogin({...stateLogin, passwordRepeat: e.target.value})} />
 						</>
 					)
 				}
