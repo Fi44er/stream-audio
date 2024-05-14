@@ -24,7 +24,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
           from: configService.get('MAIL_FROM'),
         },
         template: {
-          dir: join(__dirname, './templates/'),
+          dir: join(__dirname, './mailer/templates/'),
           adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
           options: {
             strict: true,
