@@ -15,7 +15,7 @@ start-all-services:
 	done; \
 
 change-all-prisma:
-	@for dir in ../server/services/*/; do \
+	@for dir in ../server/apps/*/; do \
 		cp ../database/prisma/schema.prisma "$${dir%/}/prisma" && \
 		(cd "$${dir%/}" && npx prisma generate); \
     done

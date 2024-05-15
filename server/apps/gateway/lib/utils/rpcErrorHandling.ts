@@ -10,6 +10,8 @@ export function grpcErrTOHttpErr({
 }: ServiceError): HttpException {
   const messager = message.replace(/^3 INVALID_ARGUMENT: /, '');
   const httpStatus = errorCodeMap[code];
+  console.log(code, message);
+
   return new HttpException(messager, httpStatus);
 }
 
@@ -18,6 +20,9 @@ export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
     const subscription = elem
       .pipe(
         catchError((error: ServiceError) => {
+          if (error.code === 13) {
+            return [];
+          }
           log({
             error: error.message,
             code: error.code,

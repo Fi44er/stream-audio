@@ -55,7 +55,7 @@
           },
           {
             "include": "./mailer/templates/*.hbs",
-            "outDir": "./dist/apps/user-svc/"
+            "outDir": "./dist/apps/user-svc/src"
           }
         ],
         "watchAssets": true
@@ -87,7 +87,7 @@
         "assets": [
           {
             "include": "./tracks/*.mp3",
-            "outDir": "./dist/apps/audio-svc/tracks"
+            "outDir": "./dist/apps/audio-svc/audio"
           }
         ],
         "watchAssets": true
