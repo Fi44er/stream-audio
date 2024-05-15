@@ -1,11 +1,13 @@
 
 import {useRouter} from '@tanstack/react-router';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import {useState} from 'react';
 import {Form} from '../../../components/Form/form';
 import {useAuthState} from '../../../state/authState';
 import style from './login.module.sass';
-import {IStateLogin} from './types/types';
+import {IStateLogin, ResponseCode} from './types/types';
+
 export const Login = (): JSX.Element => {
 	const {getUser, setUser} = useAuthState();
 
@@ -19,9 +21,16 @@ export const Login = (): JSX.Element => {
 	function login(step: number) {
 		if (step === 1 && checkState()) {
 			console.log(code);
-			axios.post<IStateLogin>('http://localhost:6069/user-svc/verify-code', {...stateLogin, code}).then(res => {
+			axios.post<ResponseCode>('http://localhost:6069/user-svc/verify-code', {...stateLogin, code}).then(res => {
 				console.log(res.data);
 				if (res.status === 201) {
+					Cookies.set('token', res.data.accessToken);
+					// Const token = Cookies.get('token');
+					// if (token) {
+					// 	const decodedToken = jwtDecode(token);
+					// 	console.log(decodedToken);
+					// }
+
 					router.navigate({to: '/'});
 				}
 			});

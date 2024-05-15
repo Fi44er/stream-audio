@@ -2,9 +2,11 @@
 
 import {useRouter} from '@tanstack/react-router';
 import axios from 'axios';
+import Cookies from 'js-cookie';
 import {useState} from 'react';
 import {Form} from '../../../components/Form/form';
 import {useAuthState} from '../../../state/authState';
+import {ResponseCode} from '../login/types/types';
 import style from './reg.module.sass';
 import {IStateRegister} from './types/types';
 export const Registeration = (): JSX.Element => {
@@ -20,9 +22,10 @@ export const Registeration = (): JSX.Element => {
 	function reg(step: number) {
 		if (step === 1 && checkState()) {
 			const {passwordRepeat, ...registerData} = stateReg;
-			axios.post<IStateRegister>('http://localhost:6069/user-svc/verify-code', {...registerData, code}).then(res => {
+			axios.post<ResponseCode>('http://localhost:6069/user-svc/verify-code', {...registerData, code}).then(res => {
 				console.log(res.data);
 				if (res.status === 201) {
+					Cookies.set('token', res.data.accessToken);
 					router.navigate({to: '/'});
 				}
 			});

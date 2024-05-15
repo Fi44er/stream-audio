@@ -5,3 +5,7 @@ export type IStateLogin = {
 
 };
 
+export type ResponseCode = {
+    accessToken: string
+
+}

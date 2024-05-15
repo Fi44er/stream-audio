@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as RoomIndexImport } from './routes/room/index'
 import { Route as ChatIndexImport } from './routes/chat/index'
 import { Route as AuthRegistrationIndexImport } from './routes/auth/registration/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
@@ -20,6 +21,11 @@ import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 
 const IndexRoute = IndexImport.update({
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RoomIndexRoute = RoomIndexImport.update({
+  path: '/room/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,6 +56,10 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ChatIndexImport
       parentRoute: typeof rootRoute
     }
+    '/room/': {
+      preLoaderRoute: typeof RoomIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/auth/login/': {
       preLoaderRoute: typeof AuthLoginIndexImport
       parentRoute: typeof rootRoute
@@ -66,6 +76,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren([
   IndexRoute,
   ChatIndexRoute,
+  RoomIndexRoute,
   AuthLoginIndexRoute,
   AuthRegistrationIndexRoute,
 ])

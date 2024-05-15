@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
-import { ClientGrpc } from '@nestjs/microservices';
+import {Body, Controller, Inject, OnModuleInit, Post} from '@nestjs/common';
+import {ClientGrpc} from '@nestjs/microservices';
 import {
   CreateRoomReq,
   CreateRoomRes,
   ROOM_SERVICE_NAME,
   RoomServiceClient,
 } from 'apps/gateway/proto/builds/room_svc';
-import { Observable } from 'rxjs';
+import {Observable} from 'rxjs';
 
 @Controller('room-svc')
 export class RoomSvcController implements OnModuleInit {
