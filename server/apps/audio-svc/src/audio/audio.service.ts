@@ -4,7 +4,7 @@ import { readdir } from 'fs/promises';
 import { ReadStream, createReadStream } from 'fs';
 import { extname, join, resolve } from 'path';
 import { Injectable } from '@nestjs/common';
-import Throttle from 'throttle'; // Replaced Throttle with ThrottleDebounce
+import Throttle from 'throttle';
 
 interface Track {
   filepath: string;
