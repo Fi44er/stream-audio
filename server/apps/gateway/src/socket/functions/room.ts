@@ -16,9 +16,10 @@ export async function joinRoom(
   const room = await roomService.findOneWithRelations({ roomId });
 
   if (!room) return;
-  client.join(roomId);
+
   await roomService.updateUserRoom({ userId, roomId });
   client.emit('message', getLastMessages(room));
+  client.join(roomId);
 }
 
 // ---  Get last room messages ---  //

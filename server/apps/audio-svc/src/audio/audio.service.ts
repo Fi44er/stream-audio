@@ -110,7 +110,8 @@ export class AudioService {
     this.stop(room);
   }
 
-  public resume(room: Room) {
+  public resume(roomId: string) {
+    const room = this.rooms.get(roomId);
     if (!room.playing) {
       this.start(room);
     }
