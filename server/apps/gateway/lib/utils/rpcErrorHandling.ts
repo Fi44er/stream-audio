@@ -1,49 +1,36 @@
 import { ServiceError } from '@grpc/grpc-js';
 import { HttpException } from '@nestjs/common';
 import { log } from 'console';
-import { catchError, Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, of } from 'rxjs';
 import { errorCodeMap } from '../const/ErrorCodeMap';
 
-export function grpcErrTOHttpErr({
-  code,
-  message,
-}: ServiceError): HttpException {
+function grpcErrTOHttpErr({ code, message }: ServiceError): HttpException {
   const messager = message.replace(/^3 INVALID_ARGUMENT: /, '');
   const httpStatus = errorCodeMap[code];
-  console.log(code, message);
-
   return new HttpException(messager, httpStatus);
 }
 
-export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
+export async function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
   return new Promise((resolve, reject) => {
     const subscription = elem
       .pipe(
-        catchError((error: ServiceError) => {
+        catchError((error: any) => {
           if (error.code === 13) {
-            return [];
+            return of(null);
+          } else {
+            return throwError(grpcErrTOHttpErr(error));
           }
-          log({
-            error: error.message,
-            code: error.code,
-          });
-          reject(grpcErrTOHttpErr(error));
-          return [];
         }),
       )
       .subscribe({
-        error: (error) => {
-          reject({
-            error: error.message,
-            code: error.status,
-          });
-        },
         next: (res) => {
-          log(res);
           resolve(res);
         },
+        error: (error) => {
+          reject(error);
+        },
       });
-
     setTimeout(
       () => {
         subscription.unsubscribe();
@@ -51,5 +38,11 @@ export function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
       },
       15 * 60 * 1000,
     );
-  });
+  })
+    .then((data: Promise<T>) => {
+      return data;
+    })
+    .catch((error) => {
+      throw new Error(error);
+    });
 }
