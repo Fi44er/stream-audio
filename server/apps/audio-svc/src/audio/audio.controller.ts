@@ -7,7 +7,7 @@ export class AudioController {
 
   @Get('/stream')
   getStream(@Res() res) {
-    const { id, client } = this.audioService.addClient();
+    const { clientId, client, roomId } = this.audioService.addClient();
 
     res
       .set({
@@ -19,7 +19,7 @@ export class AudioController {
     client.pipe(res);
 
     res.on('close', () => {
-      this.audioService.removeClient(id);
+      this.audioService.removeClient(clientId);
     });
   }
 }
