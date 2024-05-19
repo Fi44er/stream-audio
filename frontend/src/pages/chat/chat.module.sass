@@ -1,0 +1,82 @@
+.page_chat
+  background-color: #f1f1f1
+  max-width: calc( 100% - 500px )
+  min-height: calc( 100vh - 150px)
+  display: flex
+  margin: 0 auto
+  margin-top: 30px
+  flex-direction: column
+  align-items: center
+  border-radius: 15px
+  justify-content: space-between
+  padding: 30px 50px
+  gap: 30px
+  .messages
+    width: 100%
+    height: calc( 100vh - 320px - 120px)
+    .chat
+      display: flex
+      flex-direction: column
+      align-items: center
+      justify-content: space-between
+      .sender
+        display: flex
+        background-color: #58AFFF
+        border-radius: 15px
+        flex-direction: column
+        justify-content: flex-start
+        align-items: flex-end
+        align-self: flex-start
+        max-height: max-content
+        min-height: fit-content
+        max-width: max-content
+        min-width: fit-content
+        padding: 10px 20px
+
+      .recipient
+        display: flex
+        background-color: #FF5858
+        border-radius: 15px
+        flex-direction: column
+        justify-content: flex-start
+        align-items: flex-start
+        align-self: flex-end
+        max-height: max-content
+        min-height: fit-content
+        max-width: max-content
+        min-width: fit-content
+        padding: 10px 20px
+
+  .send_message
+    display: flex
+    flex-direction: row
+    gap: 15px
+    align-items: center
+    justify-content: center
+    > input
+      all: unset
+      width: 320px
+      height: 40px
+      border-radius: 5px
+      background-color: #58FF91
+      text-align: left
+      padding: 5px 15px
+      color: white
+      &::placeholder
+        color: white
+    .send_button
+      width: max-content
+      clip-path: circle(50%)
+      padding: 5px
+      height: 40px
+      width: 40px
+      background-color: red
+      color: blue
+      display: flex
+      align-items: center
+      justify-content: center
+      background-color: #58FF91
+      .send_icon
+        color: white
+        width: 60%
+        height: 70%
