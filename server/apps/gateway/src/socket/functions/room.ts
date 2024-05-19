@@ -15,11 +15,12 @@ export async function joinRoom(
 ) {
   const room = await roomService.findOneWithRelations({ roomId });
 
-  if (!room) return;
+  if (!room) return client.emit('status', false);
 
   await roomService.updateUserRoom({ userId, roomId });
   client.emit('message', getLastMessages(room));
   client.join(roomId);
+  client.emit('status', true);
 }
 
 // ---  Get last room messages ---  //

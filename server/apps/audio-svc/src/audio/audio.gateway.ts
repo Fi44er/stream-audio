@@ -23,8 +23,8 @@ export class AudioGateway
 
   async afterInit() {
     console.log('Init');
-    await this.audioServce.loadTracks('tracks', '1');
-    this.audioServce.play('1');
+    await this.audioServce.loadTracks('tracks');
+    this.audioServce.play();
   }
 
   async handleConnection(client: Socket) {
@@ -47,10 +47,10 @@ export class AudioGateway
     client.on('control', (command) => {
       switch (command) {
         case 'pause':
-          this.audioServce.pause('1');
+          this.audioServce.pause();
           break;
         case 'resume':
-          this.audioServce.resume('1');
+          this.audioServce.resume();
           break;
       }
     });
