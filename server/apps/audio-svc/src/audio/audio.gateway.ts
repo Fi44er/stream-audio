@@ -19,8 +19,6 @@ export class AudioGateway
   constructor(private readonly audioServce: AudioService) {}
   @WebSocketServer() server: Server;
 
-  private bufferHeader: Buffer = null;
-
   async afterInit() {
     console.log('Init');
     await this.audioServce.loadTracks('tracks');
@@ -29,20 +27,6 @@ export class AudioGateway
 
   async handleConnection(client: Socket) {
     console.log('connect');
-
-    if (this.bufferHeader) client.emit('bufferHeader', this.bufferHeader);
-    client.on('bufferHeader', (data) => {
-      this.bufferHeader = data;
-      client.emit('bufferHeader', this.bufferHeader);
-    });
-
-    client.on('stream', (packet) => {
-      // Only broadcast microphone if a header has been received
-      if (!this.bufferHeader) return;
-
-      // Audio stream from host microphone
-      client.emit('stream', packet);
-    });
 
     client.on('control', (command) => {
       switch (command) {
