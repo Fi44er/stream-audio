@@ -1,0 +1,15 @@
+.button {
+    display: flex;
+    grid-gap: 15px;
+    align-items: center;
+    &:hover {
+        p {
+            transform: translateX(10px);
+            transition: 0.7s;
+        }
+    }
+    p {
+        transition: 0.7s;
+        font-weight: 600;
+    }
+}
