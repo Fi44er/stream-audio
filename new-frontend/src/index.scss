@@ -30,7 +30,7 @@ button, input {
 
 .content {
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
 
     div:nth-child(2) {
         width: 100%;

@@ -8,6 +8,7 @@
     display: flex;
     justify-content: center;
     padding-top: 12rem;
+
     .container {
         width: 90%;
     }
@@ -73,6 +74,35 @@
                 }
             }
         }
+    }
 
+    .rooms {
+        .menu {
+            display: flex;
+            grid-gap: 30px;
+            button {
+                background: none;
+                color: #fff;
+                transition: 0.5s;
+                font-size: 16px;
+                &:hover, &:focus {
+                    color: #B3B3B3;
+                    transition: 0.5s;
+                }
+
+                &:after {
+                    display: block; 
+                    content: "";
+                    height: 1px;
+                    width: 0%;
+                    background-color: #a5fb9e;
+                    transition: width 0.4s ease-in-out;
+                }
+
+                &:focus:after {
+                    width: 100%;
+                }
+            }
+        }
     }
 }

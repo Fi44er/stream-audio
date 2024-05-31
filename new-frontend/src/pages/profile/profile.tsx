@@ -2,7 +2,7 @@ import styles from "./profile.module.scss";
 
 export const Profile = () => {
   return (
-    <div className={styles.profile}>
+    <div className={styles.profile} id="profile">
       <div className={styles.container}>
         <div className={styles.profileInfo}>
           <div>
@@ -17,6 +17,13 @@ export const Profile = () => {
               <span>Обо мне</span>
               <p>info info info info</p>
             </div>
+          </div>
+        </div>
+
+        <div className={styles.rooms}>
+          <div className={styles.menu}>
+            <button>Мои комнаты</button>
+            <button>Понравившиеся комнаты</button>
           </div>
         </div>
       </div>
