@@ -4,7 +4,11 @@ import { RouteButtonProps } from "./types/types";
 
 export const RoutButton = ({ text, link, imgPath }: RouteButtonProps) => {
   const { pathname } = useLocation();
-  const active = pathname === link ? styles.active : "";
+  const active =
+    pathname === link ||
+    (pathname === "/auth/register" && link === "/auth/login")
+      ? styles.active
+      : "";
 
   return (
     <Link to={link} className={styles.button}>
