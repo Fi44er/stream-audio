@@ -23,6 +23,11 @@ body {
     background-color: #181818;
 }
 
+button, input {
+    border: none;
+    outline: none;
+}
+
 .content {
     display: flex;
     height: 100vh;

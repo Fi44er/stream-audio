@@ -14,7 +14,7 @@ export const RoomCard = ({ title, likes, imgPath, link }: RoomCardProps) => {
       <h3>{title}</h3>
       <div className={styles.cardFooter}>
         <div className={styles.likes}>
-          <img src="src/assets/icons/like-2.svg" alt="like" />
+          <img src="/icons/like-2.svg" alt="like" />
           <p>{likes}</p>
         </div>
         <Link to={link}>Войти в комнату</Link>

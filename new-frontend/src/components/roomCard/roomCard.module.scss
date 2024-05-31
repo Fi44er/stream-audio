@@ -45,6 +45,12 @@
     a {
       font-size: 12px;
       border-bottom : 0.5px solid #A5FB9E;
+      transition: 0.5s;
+      padding-bottom: 3px;
+      &:hover {
+        color: #a8a8a8;
+        transition: 0.5s;
+      }
     }
   }
 }

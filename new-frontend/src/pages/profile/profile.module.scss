@@ -1,0 +1,78 @@
+.profile {
+    background-image: linear-gradient(180deg, #212121 0%, #131313 100%);
+    background-size: 100% 300px;
+    background-repeat: no-repeat;
+    background-position: top;
+
+    padding-top: auto;
+    display: flex;
+    justify-content: center;
+    padding-top: 12rem;
+    .container {
+        width: 90%;
+    }
+
+    .profileInfo {
+        display: flex;
+        grid-gap: 30px;
+
+        div:nth-child(1) {
+            display: flex;
+            flex-direction: column;
+            grid-gap: 15px;
+            button {
+                border: 2px solid #a5fb9e;
+                width: 100%;
+                border-radius: 3px;
+                height: 30px;
+                background: #a5fb9e;
+                color: #000;
+                transition: 0.5s;
+
+                &:hover {
+                    background: none;
+                    color: #fff;
+                    transition: 0.5s;
+                }
+            }
+        }
+        
+        .avatar {
+            width: 125px;
+            height: 125px;
+            border-radius: 3px;
+            border: 3px solid #ffffff38;
+
+            img {
+                width: 125px;
+                height: 125px;
+                object-fit: cover;
+                border-radius: 3px;
+            }
+        }
+
+        .userInfo {
+            display: flex;
+            flex-direction: column;
+            grid-gap: 10px;
+            h2 {
+                color: #fff;
+            }
+            .aboutMe {
+                display: flex;
+                flex-direction: column;
+                grid-gap: 5px;
+                span {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: #525252;
+                }
+    
+                p {
+                    color: #fff;
+                }
+            }
+        }
+
+    }
+}

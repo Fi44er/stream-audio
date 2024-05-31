@@ -18,6 +18,8 @@ import { Route as rootRoute } from './routes/__root'
 
 const IndexLazyImport = createFileRoute('/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
+const AuthRegisterIndexLazyImport = createFileRoute('/auth/register/')()
+const AuthLoginIndexLazyImport = createFileRoute('/auth/login/')()
 
 // Create/Update Routes
 
@@ -30,6 +32,20 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const AuthRegisterIndexLazyRoute = AuthRegisterIndexLazyImport.update({
+  path: '/auth/register/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/auth/register/index.lazy').then((d) => d.Route),
+)
+
+const AuthLoginIndexLazyRoute = AuthLoginIndexLazyImport.update({
+  path: '/auth/login/',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/auth/login/index.lazy').then((d) => d.Route),
+)
 
 // Populate the FileRoutesByPath interface
 
@@ -49,6 +65,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProfileIndexLazyImport
       parentRoute: typeof rootRoute
     }
+    '/auth/login/': {
+      id: '/auth/login/'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/auth/register/': {
+      id: '/auth/register/'
+      path: '/auth/register'
+      fullPath: '/auth/register'
+      preLoaderRoute: typeof AuthRegisterIndexLazyImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
@@ -57,6 +87,8 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   ProfileIndexLazyRoute,
+  AuthLoginIndexLazyRoute,
+  AuthRegisterIndexLazyRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,7 +100,9 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/profile/"
+        "/profile/",
+        "/auth/login/",
+        "/auth/register/"
       ]
     },
     "/": {
@@ -76,6 +110,12 @@ export const routeTree = rootRoute.addChildren({
     },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"
+    },
+    "/auth/login/": {
+      "filePath": "auth/login/index.lazy.tsx"
+    },
+    "/auth/register/": {
+      "filePath": "auth/register/index.lazy.tsx"
     }
   }
 }

@@ -1,0 +1,123 @@
+.signin {
+    position: absolute;
+    width: 400px !important;
+    background: #222;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    border-radius: 4px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 9);
+
+    .content {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      gap: 40px;
+
+      h2 {
+        font-size: 2em;
+        color: #0f0;
+      }
+
+      .form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        div {
+          input, button {
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 500;
+            font-size: 1em;
+            transition: 0.5s;
+  
+  
+            &:focus ~ i,
+            &:valid ~ i {
+              transform: translateY(-7.5px);
+              font-size: 0.8em;
+              color: #fff;
+            }
+          }
+  
+          input {
+            position: relative;
+            padding: 25px 10px 7.5px;
+            background: #333;
+            width: 380px;
+  
+          }
+          i {
+            position: absolute;
+            left: 0;
+            padding: 15px 10px;
+            font-style: normal;
+            color: #aaa;
+            transition: 0.5s;
+            pointer-events: none;
+          }
+
+          button {
+            width: 100%;
+            background-color: #0f0;
+            color: #000;
+
+            padding: 10px;
+            &:hover {
+              opacity: 0.6;
+              transition: 0.5s;
+            }
+          }
+          p {
+            height: 10px;
+            width: 100%;
+            padding-top: 10px;
+            font-size: 14px;
+            font-weight: 400;
+            color: rgb(248, 133, 133);
+          }
+          div {
+            position: relative;
+            width: 100%;
+          }
+        }
+
+        a, span {
+          color: #fff;
+          text-decoration: none;
+
+          &:nth-child(2) {
+            color: #0f0;
+            font-weight: 600;
+            &:hover {
+              color: rgb(108, 255, 108);
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+  @media (max-width: 900px) { 
+    span { 
+      width: calc(10vw - 2px); 
+      height: calc(10vw - 2px); 
+    } 
+  }
+  
+  @media (max-width: 600px) {
+    span {
+      width: calc(20vw - 2px); 
+      height: calc(20vw - 2px); 
+    } 
+    .signin {
+      width: 350px;
+    }
+  } 

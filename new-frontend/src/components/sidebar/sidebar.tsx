@@ -9,16 +9,13 @@ export const Sidebar = () => {
         <h1>Sync Media</h1>
       </div>
       <div className={styles.menuButtons}>
-        <RoutButton
-          text="Главная"
-          link="/"
-          imgPath="src/assets/icons/home.svg"
-        />
+        <RoutButton text="Главная" link="/" imgPath="/icons/home.svg" />
         <RoutButton
           text="Профиль"
           link="/profile"
-          imgPath="src/assets/icons/profile.svg"
+          imgPath="/icons/profile.svg"
         />
+        <RoutButton text="Вход" link="/auth/login" imgPath="/icons/login.svg" />
       </div>
     </div>
   );
