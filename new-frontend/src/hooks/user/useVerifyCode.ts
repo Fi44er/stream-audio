@@ -1,6 +1,9 @@
+import { jwtDecode } from "jwt-decode";
+import Cookies from "js-cookie";
 import { useMutation } from "react-query";
 import { IVerifyCodeReq } from "../../interfaces/user.interfaces";
 import userService from "../../services/user.service";
+import { useAuthState } from "../../state/authState";
 
 interface IUseVerifyCode {
   setServerError: any;
@@ -8,10 +11,18 @@ interface IUseVerifyCode {
 }
 
 export const useVerifyCode = ({ setServerError, router }: IUseVerifyCode) => {
+  const { setUser } = useAuthState();
   return useMutation({
     mutationKey: ["verifyCode"],
     mutationFn: (body: IVerifyCodeReq) => userService.verifyCode({ ...body }),
-    onSuccess: () => {
+    onSuccess: (res: any) => {
+      Cookies.set("token", res.data.accessToken);
+      const token = Cookies.get("token");
+      if (token) {
+        const decodeToken: any = jwtDecode(token);
+        setUser(decodeToken.id);
+      }
+
       router.navigate({ to: "/profile" });
     },
     onError: (error: any) => {

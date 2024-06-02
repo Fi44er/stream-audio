@@ -1,5 +1,6 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
+import { rpcErrorHandling$ } from 'apps/gateway/lib/utils/rpcErrorHandling';
 import {
   FindUSerReq,
   JwtPayload,
@@ -23,15 +24,7 @@ export class UserSvcService implements OnModuleInit {
 
   async verifyAccessToken(token: VerifyTokenReq): Promise<JwtPayload> {
     const observablePayload = this.userClient.verifyAccessToken(token);
-    const payload: Promise<JwtPayload> = firstValueFrom(observablePayload)
-      .then((jwtPayload: JwtPayload) => {
-        return jwtPayload;
-      })
-      .catch(() => {
-        return;
-      }) as Promise<JwtPayload>;
-
-    return payload;
+    return rpcErrorHandling$(observablePayload);
   }
 
   async findOne(idOrEmail: FindUSerReq): Promise<UserRes> {

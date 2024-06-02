@@ -27,13 +27,19 @@ export const Login = () => {
     useVerifyCode({ setServerError, router });
 
   const onSubmitLogin = (data: any) => {
+    setServerError("");
     loginMutate({
       email: data.email,
       password: data.password,
     });
   };
 
-  console.log(loginData);
+  const onSubmitVerifyCode = (data: any) => {
+    verifyCodeMutate({
+      ...loginData,
+      code: data.code,
+    });
+  };
 
   return (
     <div className={styles.login}>
@@ -41,10 +47,29 @@ export const Login = () => {
         {Object.keys(loginData).length > 0 ? (
           <Form
             title="Подтверждение почты"
-            onClick={handleSubmit(onSubmit)}
-            isLoading={isLoading}
+            onClick={handleSubmit(onSubmitVerifyCode)}
+            isLoading={verifyCodeIsLoading}
             error={serverError}
-          ></Form>
+          >
+            <div>
+              <div>
+                <input
+                  key="code"
+                  type="text"
+                  required
+                  {...register("code", {
+                    required: "Код не может быть пустой",
+                  })}
+                />
+                <i>Код</i>
+              </div>
+
+              <p>
+                {errors?.code &&
+                  (errors?.code?.message?.toString() || "Error!")}
+              </p>
+            </div>
+          </Form>
         ) : (
           <Form
             title="Авторизация"

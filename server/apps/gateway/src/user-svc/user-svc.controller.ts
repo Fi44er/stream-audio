@@ -23,19 +23,24 @@ import {
   UserServiceClient,
   VerifyCodeBody,
   VerifyCodeReq,
+  VerifyTokenReq,
 } from '../../proto/builds/user_svc';
 import { ClientGrpc } from '@nestjs/microservices';
 import { Response } from 'express';
 import { Cookie } from 'apps/gateway/lib/decorators/cookies.decorator';
 import { Observable } from 'rxjs';
 import { UserAgent } from 'apps/gateway/lib/decorators/userAgent.decorator';
+import { UserSvcService } from './user-svc.service';
 
 const ACCESS_TOKEN = 'accesstoken';
 @Controller('user-svc')
 export class UserSvcController implements OnModuleInit {
   private userClient: UserServiceClient;
 
-  constructor(@Inject(USER_SERVICE_NAME) private readonly client: ClientGrpc) {}
+  constructor(
+    @Inject(USER_SERVICE_NAME) private readonly client: ClientGrpc,
+    private readonly userService: UserSvcService,
+  ) {}
 
   onModuleInit() {
     this.userClient =
@@ -118,5 +123,10 @@ export class UserSvcController implements OnModuleInit {
     });
     res.sendStatus(HttpStatus.OK);
     return this.userClient.logout(logoutReq);
+  }
+
+  @Get('verify-access-token')
+  async verifyAccessToken(@Body() token: VerifyTokenReq) {
+    return await this.userService.verifyAccessToken(token);
   }
 }
