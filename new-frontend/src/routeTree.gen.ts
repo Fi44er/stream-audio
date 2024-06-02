@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as RoomRoomidImport } from './routes/room/$roomid'
 
 // Create Virtual Routes
 
@@ -32,6 +33,11 @@ const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
   path: '/profile/',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+
+const RoomRoomidRoute = RoomRoomidImport.update({
+  path: '/room/$roomid',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AuthRegisterIndexLazyRoute = AuthRegisterIndexLazyImport.update({
   path: '/auth/register/',
@@ -56,6 +62,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexLazyImport
+      parentRoute: typeof rootRoute
+    }
+    '/room/$roomid': {
+      id: '/room/$roomid'
+      path: '/room/$roomid'
+      fullPath: '/room/$roomid'
+      preLoaderRoute: typeof RoomRoomidImport
       parentRoute: typeof rootRoute
     }
     '/profile/': {
@@ -86,6 +99,7 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
+  RoomRoomidRoute,
   ProfileIndexLazyRoute,
   AuthLoginIndexLazyRoute,
   AuthRegisterIndexLazyRoute,
@@ -100,6 +114,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/room/$roomid",
         "/profile/",
         "/auth/login/",
         "/auth/register/"
@@ -107,6 +122,9 @@ export const routeTree = rootRoute.addChildren({
     },
     "/": {
       "filePath": "index.lazy.tsx"
+    },
+    "/room/$roomid": {
+      "filePath": "room/$roomid.tsx"
     },
     "/profile/": {
       "filePath": "profile/index.lazy.tsx"

@@ -1,11 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { Body, Controller, Inject, OnModuleInit, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  OnModuleInit,
+  Post,
+} from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import {
   CreateRoomReq,
   CreateRoomRes,
   ROOM_SERVICE_NAME,
   RoomServiceClient,
+  Rooms,
 } from 'apps/gateway/proto/builds/room_svc';
 import { Observable } from 'rxjs';
 
@@ -24,5 +32,10 @@ export class RoomSvcController implements OnModuleInit {
     @Body() dto: CreateRoomReq,
   ): Promise<Observable<CreateRoomRes>> {
     return this.roomClient.createRoom(dto);
+  }
+
+  @Get('get-all-rooms')
+  async getAllRooms(): Promise<Observable<Rooms>> {
+    return this.roomClient.getAllRooms({});
   }
 }

@@ -24,6 +24,7 @@ model User {
     room     Room[]
     roomUser RoomUser[]
     chat     Chat[]
+    RoomLike RoomLike[]
 
     @@map("users")
 }
@@ -63,6 +64,7 @@ model Room {
 
     roomUser RoomUser[]
     chat     Chat[]
+    roomLike RoomLike[]
 
     @@map("rooms")
 }
@@ -75,6 +77,17 @@ model RoomUser {
     room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
     @@map("room-users")
+}
+
+model RoomLike {
+    id     Int    @id @default(autoincrement())
+    userId Int
+    roomId String
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    room Room @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+    @@map("room-likes")
 }
 
 model Chat {

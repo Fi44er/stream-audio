@@ -6,22 +6,26 @@
     padding: 25px 20px;
     background-color: #000;
 
-    .sidebarHeader {
-        display: flex;
-        align-items: center;
-        grid-gap: 15px;
-
-        h1 {
-            font-family: 'Zen Dots';
-            font-size: 18px;
-            color: #fff;
+    .sidebarContent {
+        position: fixed;
+        .sidebarHeader {
+            display: flex;
+            align-items: center;
+            grid-gap: 15px;
+    
+            h1 {
+                font-family: 'Zen Dots';
+                font-size: 18px;
+                color: #fff;
+            }
+        }
+    
+        .menuButtons {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            grid-gap: 30px;
         }
     }
 
-    .menuButtons {
-        margin-top: 50px;
-        display: flex;
-        flex-direction: column;
-        grid-gap: 30px;
-    }
 }

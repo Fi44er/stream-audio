@@ -9,7 +9,6 @@ import {
   UserServiceClient,
   VerifyTokenReq,
 } from 'apps/gateway/proto/builds/user_svc';
-import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserSvcService implements OnModuleInit {
@@ -29,9 +28,7 @@ export class UserSvcService implements OnModuleInit {
 
   async findOne(idOrEmail: FindUSerReq): Promise<UserRes> {
     const observableUser = this.userClient.findUser(idOrEmail);
-    const user = firstValueFrom(observableUser).then((user) => {
-      return user;
-    });
+    const user = rpcErrorHandling$(observableUser);
     return user;
   }
 }

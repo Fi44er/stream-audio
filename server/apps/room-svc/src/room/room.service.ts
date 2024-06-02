@@ -1,11 +1,14 @@
 /* eslint-disable prettier/prettier */
+import { status } from '@grpc/grpc-js';
 import { Injectable } from '@nestjs/common';
+import { RpcException } from '@nestjs/microservices';
 import {
   CreateRoomReq,
   CreateRoomRes,
   Room,
   RoomId,
   RoomUser,
+  Rooms,
   UserId,
 } from 'apps/room-svc/proto/builds/room_svc';
 import { PrismaService } from 'apps/room-svc/src/prisma/prisma.service';
@@ -14,7 +17,29 @@ import { PrismaService } from 'apps/room-svc/src/prisma/prisma.service';
 export class RoomService {
   constructor(private readonly prismaService: PrismaService) {}
 
+  // Get all rooms
+  async getAllRooms(): Promise<Rooms> {
+    const rooms = await this.prismaService.room.findMany({
+      include: {
+        roomUser: true,
+        chat: true,
+        roomLike: true,
+      },
+    });
+
+    return { rooms };
+  }
+
+  // Create room
   async createRoom(dto: CreateRoomReq): Promise<CreateRoomRes> {
+    const user = await this.prismaService.user.findUnique({
+      where: { id: dto.ownerId },
+    });
+    if (!user)
+      throw new RpcException({
+        message: 'Пользователь не найден',
+        code: status.NOT_FOUND,
+      });
     const room = await this.prismaService.room.create({
       data: {
         ownerId: dto.ownerId,
@@ -24,6 +49,7 @@ export class RoomService {
     return room;
   }
 
+  // Get room by user id
   async getRoomUser(dto: UserId): Promise<RoomUser> {
     const { userId } = dto;
     const user = await this.prismaService.roomUser.findUnique({
@@ -32,6 +58,7 @@ export class RoomService {
     return user;
   }
 
+  // Get room by room id
   async findOneWithRelations(dto: RoomId): Promise<Room> {
     const { roomId } = dto;
     const room = await this.prismaService.room.findFirst({
@@ -40,6 +67,7 @@ export class RoomService {
       include: {
         roomUser: true,
         chat: true,
+        roomLike: true,
       },
     });
     if (!room) {

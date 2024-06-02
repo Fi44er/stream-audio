@@ -18,14 +18,14 @@ export async function joinRoom(
   if (!room) return client.emit('status', false);
 
   await roomService.updateUserRoom({ userId, roomId });
-  client.emit('message', getLastMessages(room));
+  client.emit('messages', getLastMessages(room));
   client.join(roomId);
   client.emit('status', true);
 }
 
 // ---  Get last room messages ---  //
 const getLastMessages = (room: Room): Message[] => {
-  const limit = 10;
+  const limit = 20;
   if (!room.chat) return [];
   return room.chat.slice(
     room.chat.length < limit ? 0 : -limit,
@@ -55,6 +55,8 @@ export const authenticateUser = async (
   const user = await userService.findOne({
     idOrEmail: String(payload.id),
   });
+
+  console.log(user);
 
   if (!user) {
     client.disconnect(true);

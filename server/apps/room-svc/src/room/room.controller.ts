@@ -9,11 +9,17 @@ import {
   CreateRoomRes,
   Room,
   RoomUser,
+  Rooms,
 } from 'apps/room-svc/proto/builds/room_svc';
 
 @Controller('room')
 export class RoomController {
   constructor(private readonly roomService: RoomService) {}
+
+  @GrpcMethod('RoomService', 'GetAllRooms')
+  async getAllRooms(): Promise<Rooms> {
+    return this.roomService.getAllRooms();
+  }
 
   @GrpcMethod('RoomService', 'CreateRoom')
   async createRoom(dto: CreateRoomDto): Promise<CreateRoomRes> {

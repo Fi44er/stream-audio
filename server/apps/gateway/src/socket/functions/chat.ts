@@ -17,5 +17,5 @@ export const addAndEmitMessage = async (
 
   await chatSvcService.addMessage(message);
 
-  server.to(room.roomId).emit('message', message.message);
+  server.to(room.roomId).emit('message', message);
 };

@@ -7,25 +7,27 @@ export const Sidebar = () => {
   const state = useAuthState().getUser();
   return (
     <div className={styles.sidebar}>
-      <div className={styles.sidebarHeader}>
-        <img src="/logo.svg" alt="logo" />
-        <h1>Sync Media</h1>
-      </div>
-      <div className={styles.menuButtons}>
-        <RoutButton text="Главная" link="/" imgPath="/icons/home.svg" />
-        {checkAuthState(state) ? (
-          <RoutButton
-            text="Профиль"
-            link="/profile"
-            imgPath="/icons/profile.svg"
-          />
-        ) : (
-          <RoutButton
-            text="Вход"
-            link="/auth/login"
-            imgPath="/icons/login.svg"
-          />
-        )}
+      <div className={styles.sidebarContent}>
+        <div className={styles.sidebarHeader}>
+          <img src="/logo.svg" alt="logo" />
+          <h1>Sync Media</h1>
+        </div>
+        <div className={styles.menuButtons}>
+          <RoutButton text="Главная" link="/" imgPath="/icons/home.svg" />
+          {checkAuthState(state) ? (
+            <RoutButton
+              text="Профиль"
+              link="/profile"
+              imgPath="/icons/profile.svg"
+            />
+          ) : (
+            <RoutButton
+              text="Вход"
+              link="/auth/login"
+              imgPath="/icons/login.svg"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

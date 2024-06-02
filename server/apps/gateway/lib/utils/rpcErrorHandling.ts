@@ -6,7 +6,8 @@ import { catchError, of } from 'rxjs';
 import { errorCodeMap } from '../const/ErrorCodeMap';
 
 function grpcErrTOHttpErr({ code, message }: ServiceError): HttpException {
-  const messager = message.replace(/^3 INVALID_ARGUMENT: /, '');
+  const messager = message.slice(message.indexOf(':') + 2);
+
   const httpStatus = errorCodeMap[code];
   return new HttpException(messager, httpStatus);
 }
@@ -16,7 +17,7 @@ export async function rpcErrorHandling$<T>(elem: Observable<T>): Promise<T> {
     const subscription = elem
       .pipe(
         catchError((error: any) => {
-          if (error.code === 13) {
+          if (error.code === 13 || error.code === 5) {
             return of(null);
           } else {
             return throwError(grpcErrTOHttpErr(error));

@@ -12,3 +12,9 @@ export interface IVerifyCodeReq {
   password: string;
   code: string;
 }
+
+export interface IRegisterReq {
+  email: string;
+  password: string;
+  passwordRepeat: string;
+}

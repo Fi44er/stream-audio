@@ -28,12 +28,23 @@ export interface RoomUser {
   roomId: string;
 }
 
+export interface RoomLike {
+  id: number;
+  userId: number;
+  roomId: string;
+}
+
 export interface Room {
   roomUser: RoomUser[];
   chat: Chat[];
+  roomLike: RoomLike[];
   id: string;
   ownerId: number;
   name: string;
+}
+
+export interface Rooms {
+  rooms: Room[];
 }
 
 export interface Chat {
@@ -43,9 +54,14 @@ export interface Chat {
   roomId: string;
 }
 
+export interface EmptyReq {
+}
+
 export const ROOM_SVC_PACKAGE_NAME = "room_svc";
 
 export interface RoomServiceClient {
+  getAllRooms(request: EmptyReq): Observable<Rooms>;
+
   createRoom(request: CreateRoomReq): Observable<CreateRoomRes>;
 
   getRoomUser(request: UserId): Observable<RoomUser>;
@@ -58,6 +74,8 @@ export interface RoomServiceClient {
 }
 
 export interface RoomServiceController {
+  getAllRooms(request: EmptyReq): Promise<Rooms> | Observable<Rooms> | Rooms;
+
   createRoom(request: CreateRoomReq): Promise<CreateRoomRes> | Observable<CreateRoomRes> | CreateRoomRes;
 
   getRoomUser(request: UserId): Promise<RoomUser> | Observable<RoomUser> | RoomUser;
@@ -71,7 +89,14 @@ export interface RoomServiceController {
 
 export function RoomServiceControllerMethods() {
   return function (constructor: Function) {
-    const grpcMethods: string[] = ["createRoom", "getRoomUser", "findOneWithRelations", "updateUserRoom", "leaveRoom"];
+    const grpcMethods: string[] = [
+      "getAllRooms",
+      "createRoom",
+      "getRoomUser",
+      "findOneWithRelations",
+      "updateUserRoom",
+      "leaveRoom",
+    ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
       GrpcMethod("RoomService", method)(constructor.prototype[method], method, descriptor);

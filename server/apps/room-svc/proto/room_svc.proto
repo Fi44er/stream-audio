@@ -25,12 +25,23 @@ message RoomUser {
     string roomId = 2;
 }
 
+message RoomLike {
+    int32 id = 1;
+    int32 userId = 2;
+    string roomId = 3;
+}
+
 message Room {
     repeated RoomUser roomUser = 1;
     repeated Chat chat = 2;
-    string id = 3;
-    int32 ownerId = 4;
-    string name = 5;
+    repeated RoomLike roomLike = 3;
+    string id = 4;
+    int32 ownerId = 5;
+    string name = 6;
+}
+
+message Rooms {
+    repeated Room rooms = 1;
 }
 
 message Chat {
@@ -40,7 +51,10 @@ message Chat {
     string roomId = 4;
 }
 
+message EmptyReq {}
+
 service RoomService {
+    rpc GetAllRooms(EmptyReq) returns (Rooms) {}
     rpc CreateRoom(CreateRoomReq) returns (CreateRoomRes) {}
     rpc GetRoomUser(UserId) returns (RoomUser) {}
     rpc FindOneWithRelations(RoomId) returns (Room) {}

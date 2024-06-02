@@ -58,7 +58,7 @@ export class SocketGateway
   @SubscribeMessage('message')
   async onMessage(client: Socket, dto: Message) {
     const userId = this.connectedUsers.get(client.id);
-
+    dto.userId = userId;
     await addAndEmitMessage(
       this.server,
       userId,

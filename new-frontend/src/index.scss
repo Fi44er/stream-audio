@@ -36,3 +36,17 @@ button, input {
         width: 100%;
     }
 }
+
+/* Styling the scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #131111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #A5FB9E;
+    border-radius: 10px;
+}
