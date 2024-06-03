@@ -14,6 +14,8 @@ import {
   ROOM_SERVICE_NAME,
   RoomServiceClient,
   Rooms,
+  SetLikeReq,
+  Status,
 } from 'apps/gateway/proto/builds/room_svc';
 import { Observable } from 'rxjs';
 
@@ -37,5 +39,10 @@ export class RoomSvcController implements OnModuleInit {
   @Get('get-all-rooms')
   async getAllRooms(): Promise<Observable<Rooms>> {
     return this.roomClient.getAllRooms({});
+  }
+
+  @Post('set-like')
+  async setLike(@Body() dto: SetLikeReq): Promise<Observable<Status>> {
+    return this.roomClient.setLike(dto);
   }
 }

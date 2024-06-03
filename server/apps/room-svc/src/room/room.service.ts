@@ -9,6 +9,8 @@ import {
   RoomId,
   RoomUser,
   Rooms,
+  SetLikeReq,
+  Status,
   UserId,
 } from 'apps/room-svc/proto/builds/room_svc';
 import { PrismaService } from 'apps/room-svc/src/prisma/prisma.service';
@@ -22,7 +24,6 @@ export class RoomService {
     const rooms = await this.prismaService.room.findMany({
       include: {
         roomUser: true,
-        chat: true,
         roomLike: true,
       },
     });
@@ -98,5 +99,25 @@ export class RoomService {
       where: { userId },
     });
     return room;
+  }
+
+  async setLike(dto: SetLikeReq): Promise<Status> {
+    const { id, userId, roomId } = dto;
+
+    await this.prismaService.roomLike.create({
+      data: { userId, roomId },
+    });
+
+    return { status: true };
+  }
+
+  async deleteLike(dto: SetLikeReq): Promise<Status> {
+    const { id, userId, roomId } = dto;
+
+    await this.prismaService.roomLike.delete({
+      where: { id },
+    });
+
+    return { status: true };
   }
 }

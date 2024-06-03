@@ -10,6 +10,8 @@ import {
   Room,
   RoomUser,
   Rooms,
+  SetLikeReq,
+  Status,
 } from 'apps/room-svc/proto/builds/room_svc';
 
 @Controller('room')
@@ -44,5 +46,15 @@ export class RoomController {
   @GrpcMethod('RoomService', 'LeaveRoom')
   async leaveRoom(dto: UserIdDto): Promise<RoomUser> {
     return this.roomService.leaveRoom(dto);
+  }
+
+  @GrpcMethod('RoomService', 'SetLike')
+  async setLike(dto: SetLikeReq): Promise<Status> {
+    return this.roomService.setLike(dto);
+  }
+
+  @GrpcMethod('RoomService', 'DeleteLike')
+  async deleteLike(dto: SetLikeReq): Promise<Status> {
+    return this.roomService.deleteLike(dto);
   }
 }

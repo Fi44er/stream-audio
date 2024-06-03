@@ -14,13 +14,13 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as RoomRoomidImport } from './routes/room/$roomid'
+import { Route as AuthRegisterIndexImport } from './routes/auth/register/index'
+import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
 const ProfileIndexLazyImport = createFileRoute('/profile/')()
-const AuthRegisterIndexLazyImport = createFileRoute('/auth/register/')()
-const AuthLoginIndexLazyImport = createFileRoute('/auth/login/')()
 
 // Create/Update Routes
 
@@ -39,19 +39,15 @@ const RoomRoomidRoute = RoomRoomidImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AuthRegisterIndexLazyRoute = AuthRegisterIndexLazyImport.update({
+const AuthRegisterIndexRoute = AuthRegisterIndexImport.update({
   path: '/auth/register/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/auth/register/index.lazy').then((d) => d.Route),
-)
+} as any)
 
-const AuthLoginIndexLazyRoute = AuthLoginIndexLazyImport.update({
+const AuthLoginIndexRoute = AuthLoginIndexImport.update({
   path: '/auth/login/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/auth/login/index.lazy').then((d) => d.Route),
-)
+} as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -82,14 +78,14 @@ declare module '@tanstack/react-router' {
       id: '/auth/login/'
       path: '/auth/login'
       fullPath: '/auth/login'
-      preLoaderRoute: typeof AuthLoginIndexLazyImport
+      preLoaderRoute: typeof AuthLoginIndexImport
       parentRoute: typeof rootRoute
     }
     '/auth/register/': {
       id: '/auth/register/'
       path: '/auth/register'
       fullPath: '/auth/register'
-      preLoaderRoute: typeof AuthRegisterIndexLazyImport
+      preLoaderRoute: typeof AuthRegisterIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -101,8 +97,8 @@ export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   RoomRoomidRoute,
   ProfileIndexLazyRoute,
-  AuthLoginIndexLazyRoute,
-  AuthRegisterIndexLazyRoute,
+  AuthLoginIndexRoute,
+  AuthRegisterIndexRoute,
 })
 
 /* prettier-ignore-end */
@@ -130,10 +126,10 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "profile/index.lazy.tsx"
     },
     "/auth/login/": {
-      "filePath": "auth/login/index.lazy.tsx"
+      "filePath": "auth/login/index.tsx"
     },
     "/auth/register/": {
-      "filePath": "auth/register/index.lazy.tsx"
+      "filePath": "auth/register/index.tsx"
     }
   }
 }

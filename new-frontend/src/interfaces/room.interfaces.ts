@@ -22,3 +22,9 @@ export interface RoomResponse {
     rooms: Room[];
   };
 }
+
+export interface SetLikeReq {
+  id: number;
+  userId: number;
+  roomId: string;
+}

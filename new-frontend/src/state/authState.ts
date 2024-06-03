@@ -1,21 +1,3 @@
-// import { create } from "zustand";
-// import { persist } from "zustand/middleware";
-
-// export const useAuthStore = create<any>(persist((get, set) => ({
-//   id: null,
-//   setUser(): number {
-//     return get().id;
-//   },
-// }), {
-//     name: "todos-storage",
-//     getStorage: () => sessionStorage,
-//   }));
-
-// interface State {
-//   id: number | null;
-//   setUser(): number;
-// }
-
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
@@ -37,8 +19,10 @@ export const useAuthState = create(
   )
 );
 
-interface State {
+export interface State {
   id: number;
   setUser: (id: number) => void;
   getUser: () => number;
 }
+
+export type AuthContext = ReturnType<typeof useAuthState>;

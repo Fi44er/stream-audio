@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Message } from "../message/message";
-import style from "./chat.module.scss";
+import styles from "./chat.module.scss";
 import { ChatMessage } from "../../interfaces/chat.interfaces";
 import { useForm } from "react-hook-form";
+import { useChatScroll } from "../../hooks/useChatScroll";
+import { Loader } from "../loader/loader";
 
 export const Chat = ({
   socket,
@@ -12,12 +14,15 @@ export const Chat = ({
   roomId: string;
 }): JSX.Element => {
   const [data, setData] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const ref = useChatScroll(data);
 
   const { register, handleSubmit, reset } = useForm();
 
   useEffect(() => {
     socket.on("messages", (data: any) => {
       setData(data);
+      setIsLoading(false);
     });
   });
   useEffect(() => {
@@ -38,8 +43,13 @@ export const Chat = ({
     reset();
   };
   return (
-    <div className={style.chat}>
-      <div className={style.messages}>
+    <div className={styles.chat}>
+      <div className={styles.messages} ref={ref}>
+        {isLoading && (
+          <div className={styles.loaderBlock}>
+            <Loader />
+          </div>
+        )}
         {data.map((item) => (
           <Message
             key={item.id}
@@ -50,14 +60,14 @@ export const Chat = ({
         ))}
       </div>
 
-      <form className={style.form} onSubmit={handleSubmit(sendMessage)}>
+      <form className={styles.form} onSubmit={handleSubmit(sendMessage)}>
         <input
           {...register("message", { required: true })}
           type="text"
           placeholder="Введите сообщение"
         />
         <button>
-          <img src="src/assets/Arrow.svg" alt="" />
+          <img src="/icons/Arrow.svg" alt="arrow" />
         </button>
       </form>
     </div>

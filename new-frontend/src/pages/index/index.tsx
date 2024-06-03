@@ -4,6 +4,8 @@ import styles from "./index.module.scss";
 
 export const Index = () => {
   const { data } = useGetAllRooms();
+  console.log(data);
+
   return (
     <div className={styles.index}>
       <div className={styles.content}>
@@ -12,9 +14,10 @@ export const Index = () => {
           <div className={styles.cards}>
             {data?.data.rooms.map((item) => (
               <RoomCard
+                roomId={item.id}
                 key={item.id}
                 title={item.name}
-                likes={item.roomLike.length}
+                likes={item.roomLike}
                 imgPath=""
                 link={`/room/${item.id}`}
               />

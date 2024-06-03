@@ -9,7 +9,7 @@ export const Room = ({ roomid }: { roomid: string }) => {
   const socket = io(`http://localhost:6069?token=${token}`);
 
   useEffect(() => {
-    socket.emit("joinRoom", roomid);
+    socket.emit("joinRoom", { roomid });
   }, []);
 
   useEffect(() => {});

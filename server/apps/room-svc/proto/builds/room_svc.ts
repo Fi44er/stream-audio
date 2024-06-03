@@ -43,8 +43,16 @@ export interface Room {
   name: string;
 }
 
+export interface RoomWithoutChat {
+  roomUser: RoomUser[];
+  roomLike: RoomLike[];
+  id: string;
+  ownerId: number;
+  name: string;
+}
+
 export interface Rooms {
-  rooms: Room[];
+  rooms: RoomWithoutChat[];
 }
 
 export interface Chat {
@@ -55,6 +63,16 @@ export interface Chat {
 }
 
 export interface EmptyReq {
+}
+
+export interface SetLikeReq {
+  id: number;
+  userId: number;
+  roomId: string;
+}
+
+export interface Status {
+  status: boolean;
 }
 
 export const ROOM_SVC_PACKAGE_NAME = "room_svc";
@@ -71,6 +89,10 @@ export interface RoomServiceClient {
   updateUserRoom(request: RoomUser): Observable<RoomUser>;
 
   leaveRoom(request: UserId): Observable<RoomUser>;
+
+  setLike(request: SetLikeReq): Observable<Status>;
+
+  deleteLike(request: SetLikeReq): Observable<Status>;
 }
 
 export interface RoomServiceController {
@@ -85,6 +107,10 @@ export interface RoomServiceController {
   updateUserRoom(request: RoomUser): Promise<RoomUser> | Observable<RoomUser> | RoomUser;
 
   leaveRoom(request: UserId): Promise<RoomUser> | Observable<RoomUser> | RoomUser;
+
+  setLike(request: SetLikeReq): Promise<Status> | Observable<Status> | Status;
+
+  deleteLike(request: SetLikeReq): Promise<Status> | Observable<Status> | Status;
 }
 
 export function RoomServiceControllerMethods() {
@@ -96,6 +122,8 @@ export function RoomServiceControllerMethods() {
       "findOneWithRelations",
       "updateUserRoom",
       "leaveRoom",
+      "setLike",
+      "deleteLike",
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
