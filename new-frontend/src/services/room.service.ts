@@ -1,5 +1,9 @@
 import axios from "axios";
-import { RoomResponse, SetLikeReq } from "../interfaces/room.interfaces";
+import {
+  DeleteLikeReq,
+  RoomResponse,
+  SetLikeReq,
+} from "../interfaces/room.interfaces";
 
 class RoomService {
   private URL = "http://localhost:6069/room-svc";
@@ -11,6 +15,12 @@ class RoomService {
   async setLike(body: SetLikeReq) {
     return axios.post<SetLikeReq>(`${this.URL}/set-like`, {
       ...body,
+    });
+  }
+
+  async deleteLike(body: DeleteLikeReq) {
+    return axios.delete<DeleteLikeReq>(`${this.URL}/delete-like`, {
+      data: body,
     });
   }
 }

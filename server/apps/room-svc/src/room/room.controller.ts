@@ -7,6 +7,7 @@ import { RoomIdDto } from './dto/RoomId.dto';
 import { CreateRoomDto } from './dto/CreateRoom.dto';
 import {
   CreateRoomRes,
+  DeleteLikeReq,
   Room,
   RoomUser,
   Rooms,
@@ -54,7 +55,7 @@ export class RoomController {
   }
 
   @GrpcMethod('RoomService', 'DeleteLike')
-  async deleteLike(dto: SetLikeReq): Promise<Status> {
+  async deleteLike(dto: DeleteLikeReq): Promise<Status> {
     return this.roomService.deleteLike(dto);
   }
 }

@@ -4,6 +4,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuthState } from "../../state/authState";
 import { useSetLike } from "../../hooks/room/useSetLike";
+import { useDeleteLike } from "../../hooks/room/useDeleteLike";
 
 export const RoomCard = ({
   roomId,
@@ -22,15 +23,22 @@ export const RoomCard = ({
   const [isLiked, setIsLiked] = useState(like ? true : false);
   const [numberOfLikes, setNumberOfLikes] = useState(likes?.length || 0);
 
-  const { mutate, isLoading } = useSetLike();
+  const { mutate: setLikeMutate, isLoading: setLikeIsLoading } = useSetLike();
+  const { mutate: deleteLikeMutate, isLoading: deleteLikeIsLoading } =
+    useDeleteLike();
 
   const handleLike = () => {
-    if (!isLoading) {
+    if (!setLikeIsLoading && !deleteLikeIsLoading) {
       setIsLiked((prevState) => !prevState);
       setNumberOfLikes((prevState) =>
         isLiked ? prevState - 1 : prevState + 1
       );
-      mutate({ id: like?.id ? like.id : 0, roomId, userId });
+      if (!isLiked) {
+        setLikeMutate({ roomId, userId });
+      } else {
+        const id = `${userId}_${roomId}`;
+        deleteLikeMutate({ id: id });
+      }
     }
   };
 

@@ -29,7 +29,7 @@ export interface RoomUser {
 }
 
 export interface RoomLike {
-  id: number;
+  id: string;
   userId: number;
   roomId: string;
 }
@@ -66,9 +66,12 @@ export interface EmptyReq {
 }
 
 export interface SetLikeReq {
-  id: number;
   userId: number;
   roomId: string;
+}
+
+export interface DeleteLikeReq {
+  id: string;
 }
 
 export interface Status {
@@ -92,7 +95,7 @@ export interface RoomServiceClient {
 
   setLike(request: SetLikeReq): Observable<Status>;
 
-  deleteLike(request: SetLikeReq): Observable<Status>;
+  deleteLike(request: DeleteLikeReq): Observable<Status>;
 }
 
 export interface RoomServiceController {
@@ -110,7 +113,7 @@ export interface RoomServiceController {
 
   setLike(request: SetLikeReq): Promise<Status> | Observable<Status> | Status;
 
-  deleteLike(request: SetLikeReq): Promise<Status> | Observable<Status> | Status;
+  deleteLike(request: DeleteLikeReq): Promise<Status> | Observable<Status> | Status;
 }
 
 export function RoomServiceControllerMethods() {

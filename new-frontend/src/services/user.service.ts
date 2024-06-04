@@ -24,6 +24,10 @@ class UserService {
       ...body,
     });
   }
+
+  async getAllInfoUser(idOrEmail: string) {
+    return axios.get(`${this.URL}/get-all-info-user/${idOrEmail}`);
+  }
 }
 
 export default new UserService();

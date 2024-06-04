@@ -18,3 +18,29 @@ export interface IRegisterReq {
   password: string;
   passwordRepeat: string;
 }
+
+interface Room {
+  id: string;
+  ownerId: number;
+  name: string;
+}
+
+interface RoomLike {
+  id: string;
+  userId: number;
+  roomId: string;
+}
+
+interface User {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  aboutMe: string;
+  role: string; // Предполагается, что здесь используется перечисление Roles
+}
+
+export interface UserByDb extends User {
+  room: Room[];
+  roomLike: RoomLike[];
+}

@@ -91,9 +91,34 @@ message JwtPayload {
     string login = 2;
     string role = 3;
 }
+
+message Room {
+    string id = 1;
+    int32 ownerId = 2;
+    string name = 3;
+  }
+  
+  message RoomLike {
+    string id = 1;
+    int32 userId = 2;
+    string roomId = 3;
+  }
+  
+  message User {
+    int32 id = 1;
+    string email = 2;
+    string password = 3;
+    string name = 4;
+    string about_me = 5;
+    string role = 6; 
+    repeated Room room = 7;
+    repeated RoomLike roomLike = 8;
+  }
+
 service UserService {
     rpc CreateUser(CreateUserReq) returns (UserRes) {}
     rpc FindUser(FindUSerReq) returns (UserRes) {}
+    rpc GetAllInfoUser(FindUSerReq) returns (User) {}
 
     rpc Register(RegisterReq) returns (StatusRes) {}
     rpc VerifyCode(VerifyCodeReq) returns (AccessTokenRes) {}

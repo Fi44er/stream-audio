@@ -86,12 +86,37 @@ export interface JwtPayload {
   role: string;
 }
 
+export interface Room {
+  id: string;
+  ownerId: number;
+  name: string;
+}
+
+export interface RoomLike {
+  id: string;
+  userId: number;
+  roomId: string;
+}
+
+export interface User {
+  id: number;
+  email: string;
+  password: string;
+  name: string;
+  aboutMe: string;
+  role: string;
+  room: Room[];
+  roomLike: RoomLike[];
+}
+
 export const USER_SVC_PACKAGE_NAME = "user_svc";
 
 export interface UserServiceClient {
   createUser(request: CreateUserReq): Observable<UserRes>;
 
   findUser(request: FindUSerReq): Observable<UserRes>;
+
+  getAllInfoUser(request: FindUSerReq): Observable<User>;
 
   register(request: RegisterReq): Observable<StatusRes>;
 
@@ -111,6 +136,8 @@ export interface UserServiceController {
 
   findUser(request: FindUSerReq): Promise<UserRes> | Observable<UserRes> | UserRes;
 
+  getAllInfoUser(request: FindUSerReq): Promise<User> | Observable<User> | User;
+
   register(request: RegisterReq): Promise<StatusRes> | Observable<StatusRes> | StatusRes;
 
   verifyCode(request: VerifyCodeReq): Promise<AccessTokenRes> | Observable<AccessTokenRes> | AccessTokenRes;
@@ -129,6 +156,7 @@ export function UserServiceControllerMethods() {
     const grpcMethods: string[] = [
       "createUser",
       "findUser",
+      "getAllInfoUser",
       "register",
       "verifyCode",
       "login",

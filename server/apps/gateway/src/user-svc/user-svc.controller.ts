@@ -63,6 +63,14 @@ export class UserSvcController implements OnModuleInit {
     return user;
   }
 
+  @Get('get-all-info-user/:idOrEmail')
+  async getAllInfoUser(
+    @Param('idOrEmail') idOrEmail: string,
+  ): Promise<Observable<UserRes>> {
+    const user = this.userClient.getAllInfoUser({ idOrEmail });
+    return user;
+  }
+
   // -------------------- Auth -------------------- //
 
   // ------ Register ----- //

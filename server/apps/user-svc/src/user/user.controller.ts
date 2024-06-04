@@ -18,4 +18,9 @@ export class UserController {
   async findOne(idOrLogin: FindUserDto): Promise<UserRes> {
     return await this.userService.findUser(idOrLogin.idOrEmail);
   }
+
+  @GrpcMethod('UserService', 'GetAllInfoUser')
+  async getAllInfoUser(idOrLogin: FindUserDto): Promise<UserRes> {
+    return await this.userService.getAllInfoUser(idOrLogin.idOrEmail);
+  }
 }

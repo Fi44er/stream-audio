@@ -4,7 +4,7 @@ interface RoomUser {
 }
 
 interface RoomLike {
-  id: number;
+  id: string;
   userId: number;
   roomId: string;
 }
@@ -24,7 +24,10 @@ export interface RoomResponse {
 }
 
 export interface SetLikeReq {
-  id: number;
   userId: number;
   roomId: string;
+}
+
+export interface DeleteLikeReq {
+  id: string;
 }

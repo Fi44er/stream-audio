@@ -3,7 +3,11 @@ import { RpcException } from '@nestjs/microservices';
 import { status } from '@grpc/grpc-js';
 import { correctEmail, existUser, hashingPassword } from './functions/applied';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserReq, UserRes } from 'apps/user-svc/proto/builds/user_svc';
+import {
+  CreateUserReq,
+  User,
+  UserRes,
+} from 'apps/user-svc/proto/builds/user_svc';
 @Injectable()
 export class UserService {
   constructor(private readonly prismaService: PrismaService) {}
@@ -33,6 +37,31 @@ export class UserService {
             ? { id: Number(idOrEmail) }
             : { email: String(idOrEmail) },
         ],
+      },
+    });
+
+    if (!userByDb)
+      throw new RpcException({
+        message: 'Пользователь не найден',
+        code: status.NOT_FOUND,
+      });
+
+    return userByDb;
+  }
+
+  async getAllInfoUser(idOrEmail: string): Promise<User> {
+    const pattern = /^[0-9]+$/;
+    const userByDb = await this.prismaService.user.findFirst({
+      where: {
+        OR: [
+          pattern.test(idOrEmail)
+            ? { id: Number(idOrEmail) }
+            : { email: String(idOrEmail) },
+        ],
+      },
+      include: {
+        room: true,
+        roomLike: true,
       },
     });
 

@@ -18,13 +18,15 @@ model User {
     id       Int    @id @default(autoincrement())
     email    String @unique
     password String
+    name     String @default("Anonym")
+    aboutMe  String @default("") @map("about-me")
     role     Roles  @default(USER)
 
     token    Token[]
     room     Room[]
     roomUser RoomUser[]
     chat     Chat[]
-    RoomLike RoomLike[]
+    roomLike RoomLike[]
 
     @@map("users")
 }
@@ -80,7 +82,7 @@ model RoomUser {
 }
 
 model RoomLike {
-    id     Int    @id @default(autoincrement())
+    id     String @id
     userId Int
     roomId String
 

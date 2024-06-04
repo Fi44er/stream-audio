@@ -26,7 +26,7 @@ message RoomUser {
 }
 
 message RoomLike {
-    int32 id = 1;
+    string id = 1;
     int32 userId = 2;
     string roomId = 3;
 }
@@ -62,9 +62,12 @@ message Chat {
 message EmptyReq {}
 
 message SetLikeReq {
-    int32 id = 1;
     int32 userId = 2;
     string roomId = 3;
+}
+
+message DeleteLikeReq {
+    string id = 1;
 }
 
 message Status {
@@ -79,6 +82,6 @@ service RoomService {
     rpc UpdateUserRoom(RoomUser) returns (RoomUser) {}
     rpc LeaveRoom(UserId) returns (RoomUser) {}
     rpc SetLike(SetLikeReq) returns (Status) {} 
-    rpc DeleteLike(SetLikeReq) returns (Status) {} 
+    rpc DeleteLike(DeleteLikeReq) returns (Status) {} 
     
 }

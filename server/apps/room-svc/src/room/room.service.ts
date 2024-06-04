@@ -5,6 +5,7 @@ import { RpcException } from '@nestjs/microservices';
 import {
   CreateRoomReq,
   CreateRoomRes,
+  DeleteLikeReq,
   Room,
   RoomId,
   RoomUser,
@@ -102,22 +103,20 @@ export class RoomService {
   }
 
   async setLike(dto: SetLikeReq): Promise<Status> {
-    const { id, userId, roomId } = dto;
-
+    const { userId, roomId } = dto;
+    const id = `${userId}_${roomId}`;
     await this.prismaService.roomLike.create({
-      data: { userId, roomId },
+      data: { id, userId, roomId },
     });
 
     return { status: true };
   }
 
-  async deleteLike(dto: SetLikeReq): Promise<Status> {
-    const { id, userId, roomId } = dto;
-
+  async deleteLike(dto: DeleteLikeReq): Promise<Status> {
+    const { id } = dto;
     await this.prismaService.roomLike.delete({
       where: { id },
     });
-
     return { status: true };
   }
 }
