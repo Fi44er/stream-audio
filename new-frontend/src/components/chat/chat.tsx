@@ -27,7 +27,6 @@ export const Chat = ({
   });
   useEffect(() => {
     socket.on("message", (message: any) => {
-      console.log(data);
       const lastId = data[data.length - 1]?.id;
       const newMessage = { id: lastId + 1, ...message };
       setData([...data, newMessage]);

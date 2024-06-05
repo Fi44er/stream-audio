@@ -15,9 +15,10 @@ export const useVerifyCode = ({ setServerError, router }: IUseVerifyCode) => {
   return useMutation({
     mutationKey: ["verifyCode"],
     mutationFn: (body: IVerifyCodeReq) => userService.verifyCode({ ...body }),
-    onSuccess: (res: any) => {
-      Cookies.set("token", res.data.accessToken);
-      const token = Cookies.get("token");
+    onSuccess: () => {
+      const token = Cookies.get("accesstoken");
+      console.log(token);
+
       if (token) {
         const decodeToken: any = jwtDecode(token);
         setUser(decodeToken.id);

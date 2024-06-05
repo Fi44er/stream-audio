@@ -4,13 +4,13 @@ import { UserByDb } from "../../interfaces/user.interfaces";
 import { useAuthState } from "../../state/authState";
 import styles from "./profile.module.scss";
 import { RoomCard } from "../../components/roomCard/roomCard";
+import Cookies from "js-cookie";
 
 export const Profile = () => {
   const { getUser } = useAuthState();
   const { data } = useGetAllInfoUser(getUser().toString());
   const userData: UserByDb = data?.data;
-  console.log(userData);
-
+  const token = Cookies.get("accesstoken");
   enum RoomsBlockStatus {
     LIKES = "likes",
     MY = "my",
@@ -48,7 +48,7 @@ export const Profile = () => {
             <div className={styles.myRooms}>
               <h2>Мои комнаты</h2>
               <div className={styles.cards}>
-                {userData?.room.map((item) => (
+                {userData?.room?.map((item) => (
                   <RoomCard
                     roomId={item.id}
                     key={item.id}

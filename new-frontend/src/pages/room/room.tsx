@@ -6,7 +6,8 @@ import { useEffect } from "react";
 import Player from "../../components/player/player";
 
 export const Room = ({ roomid }: { roomid: string }) => {
-  const token = Cookies.get("token")?.split(" ")[1];
+  const token = Cookies.get("accesstoken")?.split(" ")[1];
+
   const socket = io(`http://localhost:6069?token=${token}`);
 
   useEffect(() => {

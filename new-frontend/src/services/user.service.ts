@@ -14,9 +14,15 @@ class UserService {
   }
 
   async verifyCode(body: IVerifyCodeReq) {
-    return axios.post<IVerifyCodeReq>(`${this.URL}/verify-code`, {
-      ...body,
-    });
+    return axios.post<IVerifyCodeReq>(
+      `${this.URL}/verify-code`,
+      {
+        ...body,
+      },
+      {
+        withCredentials: true,
+      }
+    );
   }
 
   async register(body: IRegisterReq) {

@@ -4,7 +4,6 @@ import styles from "./index.module.scss";
 
 export const Index = () => {
   const { data } = useGetAllRooms();
-  console.log(data);
 
   return (
     <div className={styles.index}>

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useAuthState } from "../../state/authState";
 import { useSetLike } from "../../hooks/room/useSetLike";
 import { useDeleteLike } from "../../hooks/room/useDeleteLike";
+import { checkAuthState } from "../../util/checkAuthState";
 
 export const RoomCard = ({
   roomId,
@@ -28,7 +29,7 @@ export const RoomCard = ({
     useDeleteLike();
 
   const handleLike = () => {
-    if (!setLikeIsLoading && !deleteLikeIsLoading) {
+    if (!setLikeIsLoading && !deleteLikeIsLoading && checkAuthState(userId)) {
       setIsLiked((prevState) => !prevState);
       setNumberOfLikes((prevState) =>
         isLiked ? prevState - 1 : prevState + 1

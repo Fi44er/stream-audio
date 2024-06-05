@@ -100,12 +100,14 @@ export class UserSvcController implements OnModuleInit {
   }
 
   private setRefreshTokenToCookie(token: AccessToken, res: Response) {
+    console.log(token);
+
     if (!token) throw new UnauthorizedException();
     res.cookie(ACCESS_TOKEN, token.token, {
-      httpOnly: true,
+      httpOnly: false,
       sameSite: 'lax', // все запросы должны отправляться с того же сайта, где мы находимся
       expires: new Date(Date.now() + token.exp),
-      // secure: this.configService.get('NODE_ENV', 'development') === 'production',
+      secure: false,
       path: '/', // путь по которому будут доступны cookie
     });
     res.status(HttpStatus.CREATED).json({ accessToken: token.token });

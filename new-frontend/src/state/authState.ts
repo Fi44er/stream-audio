@@ -14,7 +14,7 @@ export const useAuthState = create(
     }),
     {
       name: "todos-storage",
-      getStorage: () => sessionStorage,
+      getStorage: () => localStorage,
     }
   )
 );
