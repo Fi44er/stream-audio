@@ -1,8 +1,8 @@
 import { createFileRoute, redirect } from "@tanstack/react-router";
-import { Room } from "../../pages/room/room";
+import { Profile } from "../../pages/profile/profile";
 import { checkAuthState } from "../../util/checkAuthState";
 
-export const Route = createFileRoute("/room/$roomid")({
+export const Route = createFileRoute("/profile/")({
   beforeLoad: ({ context }) => {
     const { getUser } = context.auth;
     if (!checkAuthState(getUser())) {
@@ -11,11 +11,5 @@ export const Route = createFileRoute("/room/$roomid")({
       });
     }
   },
-  component: RoomComponent,
+  component: () => <Profile />,
 });
-
-function RoomComponent() {
-  const { roomid } = Route.useParams();
-
-  return <Room roomid={roomid} />;
-}

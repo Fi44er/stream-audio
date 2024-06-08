@@ -4,13 +4,17 @@ import { UserByDb } from "../../interfaces/user.interfaces";
 import { useAuthState } from "../../state/authState";
 import styles from "./profile.module.scss";
 import { RoomCard } from "../../components/roomCard/roomCard";
-import Cookies from "js-cookie";
+import { useLogout } from "../../hooks/user/useLogout";
+import { useRouter } from "@tanstack/react-router";
 
 export const Profile = () => {
-  const { getUser } = useAuthState();
-  const { data } = useGetAllInfoUser(getUser().toString());
+  const { getUser, editUser } = useAuthState();
+  const userId = getUser();
+
+  const router = useRouter();
+
+  const { data } = useGetAllInfoUser(userId.toString());
   const userData: UserByDb = data?.data;
-  const token = Cookies.get("accesstoken");
   enum RoomsBlockStatus {
     LIKES = "likes",
     MY = "my",
@@ -19,6 +23,14 @@ export const Profile = () => {
   const [roomsBlockStatus, setRoomsBlockStatus] = useState<RoomsBlockStatus>(
     RoomsBlockStatus.MY
   );
+
+  const { mutate } = useLogout({ router, editUser });
+
+  const onSubmitLogout = () => {
+    mutate({
+      id: userId,
+    });
+  };
 
   return (
     <div className={styles.profile} id="profile">
@@ -29,6 +41,7 @@ export const Profile = () => {
               <img src="src/assets/img/no-avatar.jpg" alt="avatar" />
             </div>
             <button>Редактировать</button>
+            <button onClick={onSubmitLogout}>Выйти</button>
           </div>
           <div className={styles.userInfo}>
             <h2>{userData?.name}</h2>

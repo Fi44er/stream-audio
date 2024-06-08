@@ -8,6 +8,8 @@ export class LogoutService {
 
   async logout(dto: LogoutReq): Promise<StatusRes> {
     const { agent, id } = dto;
+    console.log(dto);
+
     const existToken = await this.prismaService.token.findFirst({
       where: {
         userAgent: agent,

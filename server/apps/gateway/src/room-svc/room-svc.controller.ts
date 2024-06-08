@@ -6,6 +6,7 @@ import {
   Get,
   Inject,
   OnModuleInit,
+  Param,
   Post,
 } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
@@ -14,6 +15,7 @@ import {
   CreateRoomRes,
   DeleteLikeReq,
   ROOM_SERVICE_NAME,
+  Room,
   RoomServiceClient,
   Rooms,
   SetLikeReq,
@@ -51,5 +53,12 @@ export class RoomSvcController implements OnModuleInit {
   @Delete('delete-like')
   async deleteLike(@Body() dto: DeleteLikeReq): Promise<Observable<Status>> {
     return this.roomClient.deleteLike(dto);
+  }
+
+  @Get('get-room-by-id/:roomId')
+  async getRoomById(
+    @Param('roomId') roomId: string,
+  ): Promise<Observable<Room>> {
+    return this.roomClient.findOneWithRelations({ roomId });
   }
 }

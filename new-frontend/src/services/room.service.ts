@@ -2,13 +2,14 @@ import axios from "axios";
 import {
   DeleteLikeReq,
   RoomResponse,
+  RoomsResponse,
   SetLikeReq,
 } from "../interfaces/room.interfaces";
 
 class RoomService {
   private URL = "http://localhost:6069/room-svc";
 
-  async getAllRooms(): Promise<RoomResponse> {
+  async getAllRooms(): Promise<RoomsResponse> {
     return axios.get(`${this.URL}/get-all-rooms`);
   }
 
@@ -22,6 +23,10 @@ class RoomService {
     return axios.delete<DeleteLikeReq>(`${this.URL}/delete-like`, {
       data: body,
     });
+  }
+
+  async getRoomById(id: string): Promise<RoomResponse> {
+    return axios.get(`${this.URL}/get-room-by-id/${id}`);
   }
 }
 

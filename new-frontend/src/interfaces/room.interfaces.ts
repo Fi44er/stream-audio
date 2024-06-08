@@ -9,7 +9,7 @@ interface RoomLike {
   roomId: string;
 }
 
-interface Room {
+export interface Room {
   roomUser: RoomUser[];
   roomLike: RoomLike[];
   id: string;
@@ -18,6 +18,12 @@ interface Room {
 }
 
 export interface RoomResponse {
+  data: {
+    room: Room;
+  };
+}
+
+export interface RoomsResponse {
   data: {
     rooms: Room[];
   };

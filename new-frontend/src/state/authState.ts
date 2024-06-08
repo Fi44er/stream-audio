@@ -11,6 +11,9 @@ export const useAuthState = create(
       getUser(): number {
         return get().id;
       },
+      editUser() {
+        set({ id: 0 });
+      },
     }),
     {
       name: "todos-storage",
@@ -23,6 +26,7 @@ export interface State {
   id: number;
   setUser: (id: number) => void;
   getUser: () => number;
+  editUser: () => void;
 }
 
 export type AuthContext = ReturnType<typeof useAuthState>;

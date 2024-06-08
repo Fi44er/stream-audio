@@ -24,7 +24,8 @@ export const Chat = ({
       setData(data);
       setIsLoading(false);
     });
-  });
+  }, [data]);
+
   useEffect(() => {
     socket.on("message", (message: any) => {
       const lastId = data[data.length - 1]?.id;

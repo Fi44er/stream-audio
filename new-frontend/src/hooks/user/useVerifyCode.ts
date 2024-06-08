@@ -17,7 +17,6 @@ export const useVerifyCode = ({ setServerError, router }: IUseVerifyCode) => {
     mutationFn: (body: IVerifyCodeReq) => userService.verifyCode({ ...body }),
     onSuccess: () => {
       const token = Cookies.get("accesstoken");
-      console.log(token);
 
       if (token) {
         const decodeToken: any = jwtDecode(token);

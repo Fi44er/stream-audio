@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { Chat } from "../../components/chat/chat";
 import { io } from "socket.io-client";
 import { useEffect } from "react";
-import Player from "../../components/player/player";
+import AudioPlayer from "../../components/player/player";
 
 export const Room = ({ roomid }: { roomid: string }) => {
   const token = Cookies.get("accesstoken")?.split(" ")[1];
@@ -14,11 +14,19 @@ export const Room = ({ roomid }: { roomid: string }) => {
     socket.emit("joinRoom", { roomid });
   }, []);
 
-  useEffect(() => {});
   return (
     <div className={styles.room}>
       <div className={styles.player}>
-        <Player />
+        <AudioPlayer
+          tracks={[
+            {
+              title: "wdqwdqw",
+              artist: "aasdas",
+              audioSrc: "/QMIIR_-_plaki_plaki_77789170.mp3",
+              image: "/logo.svg",
+            },
+          ]}
+        />
       </div>
 
       <div className={styles.chat}>

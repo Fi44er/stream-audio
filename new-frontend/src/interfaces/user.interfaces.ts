@@ -44,3 +44,7 @@ export interface UserByDb extends User {
   room: Room[];
   roomLike: RoomLike[];
 }
+
+export interface ILogoutReq {
+  id: number;
+}

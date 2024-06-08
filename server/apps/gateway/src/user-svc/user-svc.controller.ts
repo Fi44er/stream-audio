@@ -103,11 +103,13 @@ export class UserSvcController implements OnModuleInit {
     console.log(token);
 
     if (!token) throw new UnauthorizedException();
+
     res.cookie(ACCESS_TOKEN, token.token, {
       httpOnly: false,
       sameSite: 'lax', // все запросы должны отправляться с того же сайта, где мы находимся
-      expires: new Date(Date.now() + token.exp),
+      expires: new Date(Date.now() + token.exp * 1000),
       secure: false,
+      maxAge: token.exp * 1000,
       path: '/', // путь по которому будут доступны cookie
     });
     res.status(HttpStatus.CREATED).json({ accessToken: token.token });
@@ -127,8 +129,8 @@ export class UserSvcController implements OnModuleInit {
     };
 
     res.cookie(ACCESS_TOKEN, '', {
-      httpOnly: true,
-      secure: true,
+      httpOnly: false,
+      secure: false,
       expires: new Date(),
     });
     res.sendStatus(HttpStatus.OK);

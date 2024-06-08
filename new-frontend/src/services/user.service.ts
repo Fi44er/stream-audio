@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   ILoginReq,
+  ILogoutReq,
   IRegisterReq,
   IVerifyCodeReq,
 } from "../interfaces/user.interfaces";
@@ -33,6 +34,16 @@ class UserService {
 
   async getAllInfoUser(idOrEmail: string) {
     return axios.get(`${this.URL}/get-all-info-user/${idOrEmail}`);
+  }
+
+  async logout(body: ILogoutReq) {
+    return axios.post<ILogoutReq>(
+      `${this.URL}/logout`,
+      { ...body },
+      {
+        withCredentials: true,
+      }
+    );
   }
 }
 

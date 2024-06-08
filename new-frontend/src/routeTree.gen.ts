@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ProfileIndexImport } from './routes/profile/index'
 import { Route as RoomRoomidImport } from './routes/room/$roomid'
 import { Route as AuthRegisterIndexImport } from './routes/auth/register/index'
 import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
@@ -20,7 +21,6 @@ import { Route as AuthLoginIndexImport } from './routes/auth/login/index'
 // Create Virtual Routes
 
 const IndexLazyImport = createFileRoute('/')()
-const ProfileIndexLazyImport = createFileRoute('/profile/')()
 
 // Create/Update Routes
 
@@ -29,10 +29,10 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const ProfileIndexLazyRoute = ProfileIndexLazyImport.update({
+const ProfileIndexRoute = ProfileIndexImport.update({
   path: '/profile/',
   getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/profile/index.lazy').then((d) => d.Route))
+} as any)
 
 const RoomRoomidRoute = RoomRoomidImport.update({
   path: '/room/$roomid',
@@ -71,7 +71,7 @@ declare module '@tanstack/react-router' {
       id: '/profile/'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof ProfileIndexLazyImport
+      preLoaderRoute: typeof ProfileIndexImport
       parentRoute: typeof rootRoute
     }
     '/auth/login/': {
@@ -96,7 +96,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   RoomRoomidRoute,
-  ProfileIndexLazyRoute,
+  ProfileIndexRoute,
   AuthLoginIndexRoute,
   AuthRegisterIndexRoute,
 })
@@ -123,7 +123,7 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "room/$roomid.tsx"
     },
     "/profile/": {
-      "filePath": "profile/index.lazy.tsx"
+      "filePath": "profile/index.tsx"
     },
     "/auth/login/": {
       "filePath": "auth/login/index.tsx"
