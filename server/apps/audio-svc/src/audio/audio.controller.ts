@@ -1,25 +1,30 @@
 import { Controller, Get, Res } from '@nestjs/common';
 import { AudioService } from './audio.service';
+import { createReadStream } from 'fs';
+import { join } from 'path';
 
 @Controller()
 export class AudioController {
   constructor(private readonly audioService: AudioService) {}
 
-  @Get('/stream')
-  getStream(@Res() res) {
-    const { id, client } = this.audioService.addClient();
+  @Get('audio')
+  getAudio(@Res() res) {
+    // return new Observable((observer) => {
+    //   const file$ = createReadStream(
+    //     join(__dirname, '../tracks/pHonk_ONK_-_TikTok_Mega_Phonk_77458875.mp3'),
+    //   );
 
-    res
-      .set({
-        'Content-Type': 'audio/mp3',
-        'Transfer-Encoding': 'chunked',
-      })
-      .status(200);
+    //   file$.on('data', (chunk) => observer.next(chunk));
+    //   file$.on('end', () => observer.complete());
+    //   file$.on('close', () => observer.complete());
+    //   file$.on('error', (error) => observer.error(error));
 
-    client.pipe(res);
+    //   // there seems to be no way to actually close the stream
+    // });
 
-    res.on('close', () => {
-      this.audioService.removeClient(id);
-    });
+    const file = createReadStream(
+      join(__dirname, '../tracks/pHonk_ONK_-_TikTok_Mega_Phonk_77458875.mp3'),
+    );
+    file.pipe(res);
   }
 }

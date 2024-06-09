@@ -17,6 +17,9 @@ import { ChatSvcService } from '../chat-svc/chat-svc.service';
 import { authenticateUser, joinRoom } from './functions/room';
 import { RoomId } from 'apps/gateway/proto/builds/room_svc';
 import { Message } from 'apps/gateway/proto/builds/chat_svc';
+import { createReadStream } from 'fs';
+import { join } from 'path';
+import { PassThrough } from 'stream';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class SocketGateway
@@ -66,6 +69,23 @@ export class SocketGateway
       this.roomService,
       this.chatSvcService,
     );
+  }
+
+  @SubscribeMessage('stream')
+  stream(client: Socket, roomId: string) {
+    console.log(roomId);
+
+    const audioFile = createReadStream(
+      join(
+        __dirname,
+        '../../tracks/pHonk_ONK_-_TikTok_Mega_Phonk_77458875.mp3',
+      ),
+    );
+
+    const audioStream = new PassThrough();
+    audioFile.pipe(audioStream);
+
+    this.server.to(roomId).emit('stream', audioStream);
   }
 
   // --- disconnecting the user from the room --- //

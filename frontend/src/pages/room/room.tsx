@@ -1,74 +1,83 @@
-import axios from "axios";
+import styles from "./room.module.scss";
 import Cookies from "js-cookie";
-import { jwtDecode } from "jwt-decode";
-import { useRef, useState } from "react";
-import { io } from "socket.io-client";
-import { IStateCreateRoom, IStateJoinRoom, ResponseJWT } from "./types/types";
-import { Chat } from "../../components/Chat/chat";
-import style from "./room.module.scss";
-export const Room = (): JSX.Element => {
-  const [stateCreateRoom, setStateCreateRoom] = useState<IStateCreateRoom>({
-    ownerId: 0,
-    name: "",
-  });
-  const statePushRoom = useRef<IStateJoinRoom>({
-    roomId: 0,
-  });
-  const token = Cookies.get("token");
-  const test = token?.split(" ")[1];
-  console.log(test);
+import { Chat } from "../../components/chat/chat";
+import { Socket, io } from "socket.io-client";
+import { useEffect, useState } from "react";
 
-  function createRoomHandler() {
-    if (token) {
-      const decodedToken: ResponseJWT = jwtDecode(token);
-      console.log(token);
+export const Room = ({ roomid }: { roomid: string }) => {
+  const token = Cookies.get("accesstoken")?.split(" ")[1];
 
-      console.log(decodedToken);
-      setStateCreateRoom({ ...stateCreateRoom, ownerId: decodedToken.id });
-      axios
-        .post<IStateCreateRoom>(
-          "http://localhost:6069/room-svc/create-room",
-          stateCreateRoom
-        )
-        .then((res) => {
-          const { data } = res;
-          if (data.id) {
-            statePushRoom.current.roomId = data.id;
-          }
-        });
+  const [socket, setSocket] = useState<Socket | null>(null);
+
+  const [playing, setPlaying] = useState(false);
+
+  const audio = new Audio();
+
+  useEffect(() => {
+    const socketInstance = io(`http://localhost:6069?token=${token}`);
+    setSocket(socketInstance);
+    socketInstance.emit("joinRoom", { roomid });
+
+    return () => {
+      // отключение от сокета при выходе со страницы
+      socketInstance.disconnect();
+    };
+  }, [token, roomid]);
+
+  useEffect(() => {
+    socket?.emit("stream", roomid);
+
+    socket?.on("stream", (audioStream) => {
+      console.log(audioStream);
+
+      audio.srcObject = audioStream;
+      // audio.play();
+    });
+  });
+
+  const handlePlay = () => {
+    console.log(2);
+    if (audio) {
+      audio.play();
+      setPlaying(true);
     }
-  }
+  };
 
-  console.log(statePushRoom.current);
+  const handlePause = () => {
+    if (audio) {
+      audio.pause();
+      setPlaying(false);
+    }
+  };
 
-  function joinRoomHandler() {
-    const socket = io(`http://localhost:6069?token=${test}`);
-    socket.emit("join", statePushRoom.current);
-    socket.on("error", (data) => {
-      console.log(data);
-    });
-    socket.on("message", (data) => {
-      console.log(data);
-    });
-  }
-
-  const roomId = useRef({
-    roomId: "",
-  });
   return (
-    <>
-      <div className={style.room}>
-        <div className={style.block}></div>
-
-        <div className={style.chat}>
-          <Chat />
+    <div className={styles.room}>
+      <div className={styles.player}>
+        <div>
+          <button onClick={handlePlay}>Play</button>
+          <button onClick={handlePause}>Pause</button>
+          {playing ? "Playing..." : "Paused"}
         </div>
+        {/* {socket && (
+          <AudioPlayer
+            tracks={[
+              {
+                title: "wdqwdqw",
+                artist: "aasdas",
+                audioSrc: "/QMIIR_-_plaki_plaki_77789170.mp3",
+                image: "/logo.svg",
+              },
+            ]}
+            socket={socket}
+            roomId={roomid}
+          />
+        )} */}
       </div>
-      {/* <Form title='Создать комнату' onClick={joinRoomHandler} >
-				<input type='text' placeholder='Название комнаты' onChange={e => {
-					roomId.current.roomId = e.target.value;
-				}} />
-			</Form> */}
-    </>
+
+      <div className={styles.chat}>
+        {/* <Chat socket={socket} roomId={roomid} /> */}
+        {socket && <Chat socket={socket} roomId={roomid} />}
+      </div>
+    </div>
   );
 };

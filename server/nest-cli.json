@@ -21,6 +21,10 @@
           {
             "include": "../proto/*.proto",
             "outDir": "./dist/apps/gateway/proto"
+          },
+          {
+            "include": "./tracks/*.mp3",
+            "outDir": "./dist/apps/gateway/"
           }
         ]
       }
@@ -87,7 +91,7 @@
         "assets": [
           {
             "include": "./tracks/*.mp3",
-            "outDir": "./dist/apps/audio-svc/audio"
+            "outDir": "./dist/apps/audio-svc/"
           }
         ],
         "watchAssets": true

@@ -1,0 +1,31 @@
+.sidebar{
+    max-width: 210px;
+    width: 100%;
+    // display: flex;
+
+    padding: 25px 20px;
+    background-color: #000;
+
+    .sidebarContent {
+        position: fixed;
+        .sidebarHeader {
+            display: flex;
+            align-items: center;
+            grid-gap: 15px;
+    
+            h1 {
+                font-family: 'Zen Dots';
+                font-size: 18px;
+                color: #fff;
+            }
+        }
+    
+        .menuButtons {
+            margin-top: 50px;
+            display: flex;
+            flex-direction: column;
+            grid-gap: 30px;
+        }
+    }
+
+}

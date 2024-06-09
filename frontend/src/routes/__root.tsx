@@ -1,5 +1,18 @@
-import {Outlet, createRootRoute} from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
+import { Sidebar } from "../components/sidebar/sidebar";
+import { State } from "../state/authState";
 
-export const Route = createRootRoute({
-	component: () => <Outlet />,
+interface IRouterContext {
+  auth: State;
+}
+
+export const Route = createRootRouteWithContext<IRouterContext>()({
+  component: () => (
+    <>
+      <div className="content">
+        <Sidebar />
+        <Outlet />
+      </div>
+    </>
+  ),
 });
